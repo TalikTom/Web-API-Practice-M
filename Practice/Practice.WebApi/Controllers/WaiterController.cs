@@ -45,8 +45,17 @@ namespace Practice.WebApi.Controllers
         }
 
         // PUT home/waiter/5
-        public void Put(int id, [FromBody] string value)
+        public List<WaiterModel> Put(int id, [FromBody] WaiterModel waiter)
         {
+            WaiterModel waiterToUpdate = waiters.FirstOrDefault(c => c.Id == id);
+                        
+            waiterToUpdate.FirstName = waiter.FirstName;
+            waiterToUpdate.LastName = waiter.LastName;
+            waiterToUpdate.StartDate = waiter.StartDate;
+            waiterToUpdate.Certified = waiter.Certified;
+
+            return Get();
+
         }
 
         // DELETE home/waiter/5
