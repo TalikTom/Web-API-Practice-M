@@ -10,7 +10,7 @@ namespace Practice.WebApi.Controllers
 {
     public class WaiterController : ApiController
     {
-        List<WaiterModel> waiters = new List<WaiterModel>()
+        public static List<WaiterModel> waiters = new List<WaiterModel>()
         {
                new WaiterModel { FirstName = "Arsen", LastName = "Dedic", StartDate = DateTime.Now, Id = 1, Certified = false},
                new WaiterModel { FirstName = "Kico", LastName = "Slabinac", StartDate = DateTime.Now, Id = 2, Certified = true},
@@ -39,7 +39,7 @@ namespace Practice.WebApi.Controllers
             waiter.StartDate = DateTime.Now;
             waiters.Add(waiter);
 
-            return waiters;
+            return Get();
            
 
         }
