@@ -25,14 +25,23 @@ namespace Practice.WebApi.Controllers
         }
 
         // GET home/waiter/5
-        public string Get(int id)
+        public WaiterModel Get(int id)
         {
-            return "value";
+            return waiters.FirstOrDefault(c => c.Id == id);
         }
 
         // POST home/waiter
-        public void Post([FromBody] string value)
+
+        public List<WaiterModel> Post([FromBody] WaiterModel waiter)
         {
+         
+            waiter.Id = waiters.Count + 1;
+            waiter.StartDate = DateTime.Now;
+            waiters.Add(waiter);
+
+            return waiters;
+           
+
         }
 
         // PUT home/waiter/5
@@ -41,8 +50,15 @@ namespace Practice.WebApi.Controllers
         }
 
         // DELETE home/waiter/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
+            WaiterModel waiterToRemove = waiters.FirstOrDefault(c => c.Id == id);
+            if (waiterToRemove == null)
+            {
+                return NotFound();
+            }
+            waiters.Remove(waiterToRemove);
+            return Ok();
         }
 
 
