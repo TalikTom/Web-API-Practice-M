@@ -13,8 +13,16 @@ namespace Practice.WebApi.Controllers
 
         public DateTime StartDate { get; set; }
 
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public bool Certified { get; set; }
+
+        public List<Chef> chefs { get; set; }
+
+        public List<Chef> GetAllChefs()
+        {
+            return chefs;
+        }
+
     }
 }
