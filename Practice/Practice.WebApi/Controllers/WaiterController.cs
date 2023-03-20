@@ -10,7 +10,7 @@ namespace Practice.WebApi.Controllers
 {
     public class WaiterController : ApiController
     {
-        List<WaiterModel> waiters = new List<WaiterModel>()
+        public static List<WaiterModel> waiters = new List<WaiterModel>()
         {
                new WaiterModel { FirstName = "Arsen", LastName = "Dedic", StartDate = DateTime.Now, Id = 1, Certified = false},
                new WaiterModel { FirstName = "Kico", LastName = "Slabinac", StartDate = DateTime.Now, Id = 2, Certified = true},
@@ -25,24 +25,47 @@ namespace Practice.WebApi.Controllers
         }
 
         // GET home/waiter/5
-        public string Get(int id)
+        public WaiterModel Get(int id)
         {
-            return "value";
+            return waiters.FirstOrDefault(c => c.Id == id);
         }
 
         // POST home/waiter
-        public void Post([FromBody] string value)
+
+        public List<WaiterModel> Post([FromBody] WaiterModel waiter)
         {
+         
+            waiter.Id = waiters.Count + 1;
+            waiter.StartDate = DateTime.Now;
+            waiters.Add(waiter);
+
+            return Get();
+           
+
         }
 
         // PUT home/waiter/5
-        public void Put(int id, [FromBody] string value)
+        public List<WaiterModel> Put(int id, [FromBody] WaiterModel waiter)
         {
+            WaiterModel waiterToUpdate = waiters.FirstOrDefault(c => c.Id == id);
+                        
+            waiterToUpdate.FirstName = waiter.FirstName;
+            waiterToUpdate.LastName = waiter.LastName;
+            waiterToUpdate.StartDate = waiter.StartDate;
+            waiterToUpdate.Certified = waiter.Certified;
+
+            return Get();
+
         }
 
         // DELETE home/waiter/5
-        public void Delete(int id)
+        public List<WaiterModel> Delete(int id)
         {
+            WaiterModel waiterToRemove = waiters.FirstOrDefault(c => c.Id == id);
+           
+            waiters.Remove(waiterToRemove);
+
+            return Get();
         }
 
 
