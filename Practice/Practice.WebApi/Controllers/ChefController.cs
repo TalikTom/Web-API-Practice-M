@@ -44,30 +44,30 @@ namespace Practice.WebApi.Controllers
             chefs.Add(chef);
         }
 
-        // GET api/chef
+        // GET home/chef
         public List<Chef> Get()
         {
             return chefs;
         }
 
-        // GET api/chef/5
-        [Route("api/chef/{id}")]
+        // GET home/chef/5
+        [Route("home/chef/{id}")]
         public Chef Get(int id)
         {
             return chefs.FirstOrDefault(c => c.Id == id);
         }
 
-        // POST api/chef
+        // POST home/chef
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/chef/5
+        // PUT home/chef/5
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/chef/5
+        // DELETE home/chef/5
         public void Delete(int id)
         {
         }
