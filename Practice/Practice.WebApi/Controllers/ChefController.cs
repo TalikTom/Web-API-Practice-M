@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Razor.Generator;
+using Practice.WebApi.Models;
 
 
 
@@ -13,13 +14,13 @@ namespace Practice.WebApi.Controllers
     public class ChefController : ApiController
     {
 
-        private List<Chef> chefs;
+        IList<ChefModel> chefs = null;
 
         public ChefController()
         {
-            chefs = new List<Chef>();
+            chefs = new List<ChefModel>();
 
-            Chef chef = new Chef();
+            ChefModel chef = new ChefModel();
             chef.FirstName = "Marko";
             chef.LastName = "Marulic";
             chef.StartDate = DateTime.Now;
@@ -27,7 +28,7 @@ namespace Practice.WebApi.Controllers
             chef.Id = 1;
             chefs.Add(chef);
 
-            chef = new Chef();
+            chef = new ChefModel();
             chef.FirstName = "Ivan";
             chef.LastName = "Ivano";
             chef.StartDate = DateTime.Now;
@@ -35,7 +36,7 @@ namespace Practice.WebApi.Controllers
             chef.Id = 2;
             chefs.Add(chef);
 
-            chef = new Chef();
+            chef = new ChefModel();
             chef.FirstName = "Lucian";
             chef.LastName = "Luciano";
             chef.StartDate = DateTime.Now;
@@ -45,14 +46,21 @@ namespace Practice.WebApi.Controllers
         }
 
         // GET home/chef
-        public List<Chef> Get()
+        public List<ChefModel> Get()
         {
-            return chefs;
+            return chefs.Select(c => new ChefModel
+            {
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                StartDate = c.StartDate,
+                Certified = c.Certified,
+                Id = c.Id
+            }).ToList<ChefModel>();
         }
 
         // GET home/chef/5
         [Route("home/chef/{id}")]
-        public Chef Get(int id)
+        public ChefModel Get(int id)
         {
             return chefs.FirstOrDefault(c => c.Id == id);
         }
@@ -68,8 +76,17 @@ namespace Practice.WebApi.Controllers
         }
 
         // DELETE home/chef/5
+        [HttpDelete]
+        [Route("home/chef/{id}")]
         public void Delete(int id)
         {
+
+            var chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
+            if (chefToRemove != null)
+            {
+                chefs.Remove(chefToRemove);
+            }
+
         }
 
 
