@@ -18,11 +18,6 @@ namespace Practice.WebApi.Models
 
         public bool Certified { get; set; }
 
-        public List<ChefModel> chefs { get; set; }
 
-        public List<ChefModel> GetAllChefs()
-        {
-            return chefs;
-        }
     }
 }

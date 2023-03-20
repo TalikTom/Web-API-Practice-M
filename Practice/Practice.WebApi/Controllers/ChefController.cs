@@ -14,36 +14,13 @@ namespace Practice.WebApi.Controllers
     public class ChefController : ApiController
     {
 
-        List<ChefModel> chefs = null;
-
-        public ChefController()
+        public static List<ChefModel> chefs = new List<ChefModel>()
         {
-            chefs = new List<ChefModel>();
-
-            ChefModel chef = new ChefModel();
-            chef.FirstName = "Marko";
-            chef.LastName = "Marulic";
-            chef.StartDate = DateTime.Now;
-            chef.Certified = false;
-            chef.Id = 1;
-            chefs.Add(chef);
-
-            chef = new ChefModel();
-            chef.FirstName = "Ivan";
-            chef.LastName = "Ivano";
-            chef.StartDate = DateTime.Now;
-            chef.Certified = true;
-            chef.Id = 2;
-            chefs.Add(chef);
-
-            chef = new ChefModel();
-            chef.FirstName = "Lucian";
-            chef.LastName = "Luciano";
-            chef.StartDate = DateTime.Now;
-            chef.Certified = true;
-            chef.Id = 3;
-            chefs.Add(chef);
-        }
+               new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = DateTime.Now, Id = 1, Certified = false},
+               new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = DateTime.Now, Id = 2, Certified = true},
+               new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = DateTime.Now, Id = 3, Certified = false},
+               new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = DateTime.Now, Id = 4, Certified = true},
+        };
 
         // GET home/chef
         public List<ChefModel> Get()
@@ -58,34 +35,48 @@ namespace Practice.WebApi.Controllers
             }).ToList<ChefModel>();
         }
 
-        // GET home/chef/5
-        [Route("home/chef/{id}")]
+        // GET home/waiter/5
         public ChefModel Get(int id)
         {
             return chefs.FirstOrDefault(c => c.Id == id);
         }
 
-        // POST home/chef
-        public void Post([FromBody] ChefModel chef)
+        // POST home/waiter
+
+        public List<ChefModel> Post([FromBody] ChefModel chef)
         {
-            if (chef != null)
-            {
-                chef.Id = chefs.Count + 1;
-                chefs.Add(chef);
-            }
+
+            chef.Id = chefs.Count + 1;
+            chef.StartDate = DateTime.Now;
+            chefs.Add(chef);
+
+            return Get();
+
+
         }
 
-        // PUT home/chef/5
-        public void Put(int id, [FromBody] string value)
+        // PUT home/waiter/5
+        public List<ChefModel> Put(int id, [FromBody] ChefModel chef)
         {
+            ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
+
+            chefToUpdate.FirstName = chef.FirstName;
+            chefToUpdate.LastName = chef.LastName;
+            chefToUpdate.StartDate = chef.StartDate;
+            chefToUpdate.Certified = chef.Certified;
+
+            return Get();
+
         }
 
-        // DELETE home/chef/5
-        [HttpDelete]
-        [Route("home/chef/{id}")]
-        public void Delete(int id)
+        // DELETE home/waiter/5
+        public List<ChefModel> Delete(int id)
         {
-            chefs.RemoveAll(c => c.Id == id);
+            ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
+
+            chefs.Remove(chefToRemove);
+
+            return Get();
         }
 
 
