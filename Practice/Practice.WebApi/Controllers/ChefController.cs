@@ -14,7 +14,7 @@ namespace Practice.WebApi.Controllers
     public class ChefController : ApiController
     {
 
-        IList<ChefModel> chefs = null;
+        List<ChefModel> chefs = null;
 
         public ChefController()
         {
@@ -66,8 +66,13 @@ namespace Practice.WebApi.Controllers
         }
 
         // POST home/chef
-        public void Post([FromBody] string value)
+        public void Post([FromBody] ChefModel chef)
         {
+            if (chef != null)
+            {
+                chef.Id = chefs.Count + 1;
+                chefs.Add(chef);
+            }
         }
 
         // PUT home/chef/5
@@ -80,13 +85,7 @@ namespace Practice.WebApi.Controllers
         [Route("home/chef/{id}")]
         public void Delete(int id)
         {
-
-            var chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
-            if (chefToRemove != null)
-            {
-                chefs.Remove(chefToRemove);
-            }
-
+            chefs.RemoveAll(c => c.Id == id);
         }
 
 
