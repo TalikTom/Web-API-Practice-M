@@ -50,15 +50,13 @@ namespace Practice.WebApi.Controllers
         }
 
         // DELETE home/waiter/5
-        public IHttpActionResult Delete(int id)
+        public List<WaiterModel> Delete(int id)
         {
             WaiterModel waiterToRemove = waiters.FirstOrDefault(c => c.Id == id);
-            if (waiterToRemove == null)
-            {
-                return NotFound();
-            }
+           
             waiters.Remove(waiterToRemove);
-            return Ok();
+
+            return Get();
         }
 
 
