@@ -42,8 +42,10 @@ namespace Practice.WebApi.Controllers
         }
 
         // POST home/waiter
-
-        public List<ChefModel> Post([FromBody] ChefModel chef)
+        // Use [FromUri] attribute to force Web API to post the value of complex type from the query string
+        // Example of URI:
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
+        public List<ChefModel> Post([FromUri] ChefModel chef)
         {
 
             chef.Id = chefs.Count + 1;
@@ -56,7 +58,10 @@ namespace Practice.WebApi.Controllers
         }
 
         // PUT home/waiter/5
-        public List<ChefModel> Put(int id, [FromBody] ChefModel chef)
+        // Use [FromUri] attribute to force Web API to update the value of complex type from the query string
+        // Example of URI:
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
+        public List<ChefModel> Put(int id, [FromUri] ChefModel chef)
         {
             ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
 
