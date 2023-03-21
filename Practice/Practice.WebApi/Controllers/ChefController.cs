@@ -140,24 +140,46 @@ namespace Practice.WebApi.Controllers
         // 2
         public HttpResponseMessage Delete([FromBody] int id)
         {
-            ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
 
-            if (chefToRemove == null)
+            try
             {
-                HttpResponseMessage fail = new HttpResponseMessage(HttpStatusCode.NotFound);
-                fail.Content = new StringContent($"Chef can not be deleted, doesn't exist, Response Code: {(int)fail.StatusCode} {fail.StatusCode}");
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-               
+                if (!chefs.Any(c => c.Id == id))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist or has already been deleted");
+                }
+
+                ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
+
+                chefs.Remove(chefToRemove);
+
+
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToRemove);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while deleting a chef via DELETE.");
             }
 
-            chefs.Remove(chefToRemove);
+            
 
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            //if (chefToRemove == null)
+            //{
+            //    HttpResponseMessage fail = new HttpResponseMessage(HttpStatusCode.NotFound);
+            //    fail.Content = new StringContent($"Chef can not be deleted, doesn't exist, Response Code: {(int)fail.StatusCode} {fail.StatusCode}");
+            //    return new HttpResponseMessage(HttpStatusCode.NotFound);
+               
+            //}
 
-            response.Content = new StringContent($"Chef successfully deleted, Response Code: {(int)response.StatusCode} {response.StatusCode}");
+            //chefs.Remove(chefToRemove);
 
-            return response;
+            //HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            //response.Content = new StringContent($"Chef successfully deleted, Response Code: {(int)response.StatusCode} {response.StatusCode}");
+
+            //return response;
         }
+
+
 
 
     }
