@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Razor.Generator;
+using Microsoft.Extensions.Logging;
 using Practice.WebApi.Models;
 
 
@@ -14,7 +15,7 @@ namespace Practice.WebApi.Controllers
 {
     public class ChefController : ApiController
     {
-
+       
         public static List<ChefModel> chefs = new List<ChefModel>()
         {
                new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = new DateTime(2022, 1, 1, 10, 2, 0), Id = 1, Certified = false},
@@ -29,15 +30,7 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                chefs.Select(c => new ChefModel
-                {
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    StartDate = c.StartDate,
-                    Certified = c.Certified,
-                    Id = c.Id
-                }).ToList<ChefModel>();
-
+                
                 if (chefs.Any())
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, chefs);
@@ -51,7 +44,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while executing Get all chefs method.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while executing Get all chefs method. {ex.Message}");
             }
         }
 
@@ -66,12 +59,11 @@ namespace Practice.WebApi.Controllers
                 {
                     return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, singleChef);
                 }
-                else
-                {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
-                }
+
+               return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                  return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing Get chef by id");
             }
@@ -113,12 +105,11 @@ namespace Practice.WebApi.Controllers
         {
             try
             {
-                if (!chefs.Any(c => c.Id == chef.Id))
+                ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
+                if (chefToUpdate == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist");
                 }
-
-                ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
 
                 chefToUpdate.FirstName = chef.FirstName;
                 chefToUpdate.LastName = chef.LastName;
@@ -143,15 +134,14 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                if (!chefs.Any(c => c.Id == id))
+                ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
+
+                if (chefToRemove == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist or has already been deleted");
                 }
 
-                ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
-
                 chefs.Remove(chefToRemove);
-
 
                 return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToRemove);
             }
@@ -160,23 +150,7 @@ namespace Practice.WebApi.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while deleting a chef via DELETE.");
             }
 
-            
-
-            //if (chefToRemove == null)
-            //{
-            //    HttpResponseMessage fail = new HttpResponseMessage(HttpStatusCode.NotFound);
-            //    fail.Content = new StringContent($"Chef can not be deleted, doesn't exist, Response Code: {(int)fail.StatusCode} {fail.StatusCode}");
-            //    return new HttpResponseMessage(HttpStatusCode.NotFound);
-               
-            //}
-
-            //chefs.Remove(chefToRemove);
-
-            //HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            //response.Content = new StringContent($"Chef successfully deleted, Response Code: {(int)response.StatusCode} {response.StatusCode}");
-
-            //return response;
+           
         }
 
 
