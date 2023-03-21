@@ -60,7 +60,7 @@ namespace Practice.WebApi.Controllers
         // PUT home/waiter/5
         // Use [FromUri] attribute to force Web API to update the value of complex type from the query string
         // Example of URI:
-        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
         public List<ChefModel> Put(int id, [FromUri] ChefModel chef)
         {
             ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
@@ -75,7 +75,10 @@ namespace Practice.WebApi.Controllers
         }
 
         // DELETE home/waiter/5
-        public List<ChefModel> Delete(int id)
+        // Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
+        // Example of Body:
+        // 2
+        public List<ChefModel> Delete([FromBody] int id)
         {
             ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
 
