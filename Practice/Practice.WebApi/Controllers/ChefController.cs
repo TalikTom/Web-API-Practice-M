@@ -117,7 +117,7 @@ namespace Practice.WebApi.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    App_Start.Logger.createTxtFSSW("hey");
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                     
                 }
