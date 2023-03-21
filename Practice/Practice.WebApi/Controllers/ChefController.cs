@@ -8,6 +8,8 @@ using System.Web.Http;
 using System.Web.Razor.Generator;
 using Microsoft.Extensions.Logging;
 using Practice.WebApi.Models;
+using System.ComponentModel.DataAnnotations;
+
 
 
 
@@ -63,9 +65,9 @@ namespace Practice.WebApi.Controllers
                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing Get chef by id");
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occured while executing Get chef by id. {ex.Message}");
             }
         }
 
@@ -91,7 +93,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while creating a new chef via POST.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while creating a new chef via POST. {ex.Message}");
             }
 
 
@@ -105,10 +107,19 @@ namespace Practice.WebApi.Controllers
         {
             try
             {
+               
+
                 ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
                 if (chefToUpdate == null)
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    
                 }
 
                 chefToUpdate.FirstName = chef.FirstName;
@@ -120,7 +131,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while updating a chef via PUT.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while updating a chef via PUT. {ex.Message}");
             }
 
         }
@@ -147,7 +158,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while deleting a chef via DELETE.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while deleting a chef via DELETE. {ex.Message}");
             }
 
            
