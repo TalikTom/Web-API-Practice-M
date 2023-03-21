@@ -109,16 +109,28 @@ namespace Practice.WebApi.Controllers
         // Use [FromUri] attribute to force Web API to update the value of complex type from the query string
         // Example of URI:
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
-        public List<ChefModel> Put(int id, [FromUri] ChefModel chef)
+        public HttpResponseMessage Put(int id, [FromUri] ChefModel chef)
         {
-            ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                if (!chefs.Any(c => c.Id == chef.Id))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist");
+                }
 
-            chefToUpdate.FirstName = chef.FirstName;
-            chefToUpdate.LastName = chef.LastName;
-            chefToUpdate.StartDate = chef.StartDate;
-            chefToUpdate.Certified = chef.Certified;
+                ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
 
-            return Get();
+                chefToUpdate.FirstName = chef.FirstName;
+                chefToUpdate.LastName = chef.LastName;
+                chefToUpdate.StartDate = chef.StartDate;
+                chefToUpdate.Certified = chef.Certified;
+
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToUpdate);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while updating a chef via PUT.");
+            }
 
         }
 
