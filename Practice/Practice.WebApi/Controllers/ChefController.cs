@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Razor.Generator;
 using Practice.WebApi.Models;
@@ -22,7 +23,7 @@ namespace Practice.WebApi.Controllers
                new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = new DateTime(2021, 12, 1, 10, 0, 30), Id = 4, Certified = true},
         };
 
-        // GET home/chef
+        // GET home/chef/all
         public List<ChefModel> Get()
         {
             return chefs.Select(c => new ChefModel
@@ -36,9 +37,25 @@ namespace Practice.WebApi.Controllers
         }
 
         // GET home/waiter/5
-        public ChefModel Get(int id)
+        public HttpResponseMessage Get(int id)
         {
-            return chefs.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                ChefModel singleChef = chefs.FirstOrDefault(c => c.Id == id);
+
+                if (singleChef != null)
+                {
+                    return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, singleChef);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing GetEmployee");
+            }
         }
 
         // POST home/waiter
@@ -78,13 +95,25 @@ namespace Practice.WebApi.Controllers
         // Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
         // Example of Body:
         // 2
-        public List<ChefModel> Delete([FromBody] int id)
+        public HttpResponseMessage Delete([FromBody] int id)
         {
             ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
 
+            if (chefToRemove == null)
+            {
+                HttpResponseMessage fail = new HttpResponseMessage(HttpStatusCode.NotFound);
+                fail.Content = new StringContent($"Chef can not be deleted, doesn't exist, Response Code: {(int)fail.StatusCode} {fail.StatusCode}");
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+               
+            }
+
             chefs.Remove(chefToRemove);
 
-            return Get();
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+
+            response.Content = new StringContent($"Chef successfully deleted, Response Code: {(int)response.StatusCode} {response.StatusCode}");
+
+            return response;
         }
 
 
