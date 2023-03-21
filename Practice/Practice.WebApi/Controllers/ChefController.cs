@@ -24,16 +24,35 @@ namespace Practice.WebApi.Controllers
         };
 
         // GET home/chef/all
-        public List<ChefModel> Get()
+        public HttpResponseMessage Get()
         {
-            return chefs.Select(c => new ChefModel
+
+            try
             {
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                StartDate = c.StartDate,
-                Certified = c.Certified,
-                Id = c.Id
-            }).ToList<ChefModel>();
+                chefs.Select(c => new ChefModel
+                {
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+                    StartDate = c.StartDate,
+                    Certified = c.Certified,
+                    Id = c.Id
+                }).ToList<ChefModel>();
+
+                if (chefs.Any())
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefs);
+
+                } else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chefs Not Found");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while executing Get method.");
+            }
         }
 
         // GET home/waiter/5
@@ -54,7 +73,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing GetEmployee");
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing GetEmployee");
             }
         }
 
