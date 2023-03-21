@@ -51,7 +51,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while executing Get method.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while executing Get all chefs method.");
             }
         }
 
@@ -73,7 +73,7 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing GetEmployee");
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing Get chef by id");
             }
         }
 
@@ -81,14 +81,26 @@ namespace Practice.WebApi.Controllers
         // Use [FromUri] attribute to force Web API to post the value of complex type from the query string
         // Example of URI:
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
-        public List<ChefModel> Post([FromUri] ChefModel chef)
+        public HttpResponseMessage Post([FromUri] ChefModel chef)
         {
 
-            chef.Id = chefs.Count + 1;
-            chef.StartDate = DateTime.Now;
-            chefs.Add(chef);
+            try
+            {
+                if (chefs.Any(c => c.Id == chef.Id))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the same ID already exists.");
+                }
 
-            return Get();
+                chef.Id = chefs.Count + 1;
+                chef.StartDate = DateTime.Now;
+                chefs.Add(chef);
+
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chef);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while creating a new chef via POST.");
+            }
 
 
         }
