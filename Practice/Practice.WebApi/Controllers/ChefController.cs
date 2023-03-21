@@ -16,10 +16,10 @@ namespace Practice.WebApi.Controllers
 
         public static List<ChefModel> chefs = new List<ChefModel>()
         {
-               new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = DateTime.Now, Id = 1, Certified = false},
-               new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = DateTime.Now, Id = 2, Certified = true},
-               new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = DateTime.Now, Id = 3, Certified = false},
-               new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = DateTime.Now, Id = 4, Certified = true},
+               new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = new DateTime(2022, 1, 1, 10, 2, 0), Id = 1, Certified = false},
+               new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = new DateTime(2022, 1, 1, 15, 45, 0), Id = 2, Certified = true},
+               new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = new DateTime(2022, 1, 5, 1, 0, 0), Id = 3, Certified = false},
+               new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = new DateTime(2021, 12, 1, 10, 0, 30), Id = 4, Certified = true},
         };
 
         // GET home/chef
