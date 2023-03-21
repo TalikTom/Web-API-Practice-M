@@ -102,10 +102,10 @@ namespace Practice.WebApi.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A waiter with the requested ID doesn't exist");
                 }
 
-                waiterToUpdate.FirstName = waiter.FirstName;
-                waiterToUpdate.LastName = waiter.LastName;
-                waiterToUpdate.StartDate = waiter.StartDate;
-                waiterToUpdate.Certified = waiter.Certified;
+                waiterToUpdate.FirstName = !string.IsNullOrEmpty(waiter.FirstName) ? waiter.FirstName : waiterToUpdate.FirstName;
+                waiterToUpdate.LastName = !string.IsNullOrEmpty(waiter.LastName) ? waiter.LastName : waiterToUpdate.LastName;
+                waiterToUpdate.StartDate = waiter.StartDate == null ? waiter.StartDate : waiterToUpdate.StartDate;
+                waiterToUpdate.Certified = waiter.Certified ? waiter.Certified : waiterToUpdate.Certified;
 
                 return Request.CreateResponse<WaiterModel>(HttpStatusCode.OK, waiterToUpdate);
             }
