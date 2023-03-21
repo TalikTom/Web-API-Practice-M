@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Razor.Generator;
+using Microsoft.Extensions.Logging;
 using Practice.WebApi.Models;
 
 
@@ -13,71 +15,145 @@ namespace Practice.WebApi.Controllers
 {
     public class ChefController : ApiController
     {
-
+       
         public static List<ChefModel> chefs = new List<ChefModel>()
         {
-               new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = DateTime.Now, Id = 1, Certified = false},
-               new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = DateTime.Now, Id = 2, Certified = true},
-               new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = DateTime.Now, Id = 3, Certified = false},
-               new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = DateTime.Now, Id = 4, Certified = true},
+               new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = new DateTime(2022, 1, 1, 10, 2, 0), Id = 1, Certified = false},
+               new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = new DateTime(2022, 1, 1, 15, 45, 0), Id = 2, Certified = true},
+               new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = new DateTime(2022, 1, 5, 1, 0, 0), Id = 3, Certified = false},
+               new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = new DateTime(2021, 12, 1, 10, 0, 30), Id = 4, Certified = true},
         };
 
-        // GET home/chef
-        public List<ChefModel> Get()
+        // GET home/chef/all
+        public HttpResponseMessage Get()
         {
-            return chefs.Select(c => new ChefModel
+
+            try
             {
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                StartDate = c.StartDate,
-                Certified = c.Certified,
-                Id = c.Id
-            }).ToList<ChefModel>();
+                
+                if (chefs.Any())
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefs);
+
+                } else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chefs Not Found");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while executing Get all chefs method. {ex.Message}");
+            }
         }
 
         // GET home/waiter/5
-        public ChefModel Get(int id)
+        public HttpResponseMessage Get(int id)
         {
-            return chefs.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                ChefModel singleChef = chefs.FirstOrDefault(c => c.Id == id);
+
+                if (singleChef != null)
+                {
+                    return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, singleChef);
+                }
+
+               return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
+
+            }
+            catch (Exception)
+            {
+                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occured while executing Get chef by id");
+            }
         }
 
         // POST home/waiter
-
-        public List<ChefModel> Post([FromBody] ChefModel chef)
+        // Use [FromUri] attribute to force Web API to post the value of complex type from the query string
+        // Example of URI:
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
+        public HttpResponseMessage Post([FromUri] ChefModel chef)
         {
 
-            chef.Id = chefs.Count + 1;
-            chef.StartDate = DateTime.Now;
-            chefs.Add(chef);
+            try
+            {
+                if (chefs.Any(c => c.Id == chef.Id))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the same ID already exists.");
+                }
 
-            return Get();
+                chef.Id = chefs.Count + 1;
+                chef.StartDate = DateTime.Now;
+                chefs.Add(chef);
+
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chef);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while creating a new chef via POST.");
+            }
 
 
         }
 
         // PUT home/waiter/5
-        public List<ChefModel> Put(int id, [FromBody] ChefModel chef)
+        // Use [FromUri] attribute to force Web API to update the value of complex type from the query string
+        // Example of URI:
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
+        public HttpResponseMessage Put(int id, [FromUri] ChefModel chef)
         {
-            ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
+                if (chefToUpdate == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist");
+                }
 
-            chefToUpdate.FirstName = chef.FirstName;
-            chefToUpdate.LastName = chef.LastName;
-            chefToUpdate.StartDate = chef.StartDate;
-            chefToUpdate.Certified = chef.Certified;
+                chefToUpdate.FirstName = chef.FirstName;
+                chefToUpdate.LastName = chef.LastName;
+                chefToUpdate.StartDate = chef.StartDate;
+                chefToUpdate.Certified = chef.Certified;
 
-            return Get();
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToUpdate);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while updating a chef via PUT.");
+            }
 
         }
 
         // DELETE home/waiter/5
-        public List<ChefModel> Delete(int id)
+        // Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
+        // Example of Body:
+        // 2
+        public HttpResponseMessage Delete([FromBody] int id)
         {
-            ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
 
-            chefs.Remove(chefToRemove);
+            try
+            {
+                ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
 
-            return Get();
+                if (chefToRemove == null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist or has already been deleted");
+                }
+
+                chefs.Remove(chefToRemove);
+
+                return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToRemove);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error occurred while deleting a chef via DELETE.");
+            }
+
+           
         }
+
+
 
 
     }
