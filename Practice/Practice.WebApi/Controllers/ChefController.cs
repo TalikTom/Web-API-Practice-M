@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 
 
+
 namespace Practice.WebApi.Controllers
 {
     public class ChefController : ApiController
@@ -116,7 +117,9 @@ namespace Practice.WebApi.Controllers
 
                 if (!ModelState.IsValid)
                 {
+                    App_Start.Logger.createTxtFSSW("hey");
                     return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    
                 }
 
                 chefToUpdate.FirstName = chef.FirstName;
