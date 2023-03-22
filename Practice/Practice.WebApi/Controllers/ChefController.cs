@@ -141,8 +141,9 @@ namespace Practice.WebApi.Controllers
             }
         }
 
-       //POST home/chef
-       [HttpPost]
+        //POST home/chef
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
+        [HttpPost]
        [Route("home/chef/add-chef")]
         public HttpResponseMessage Post([FromBody] ChefModel chef)
         {
@@ -227,36 +228,50 @@ namespace Practice.WebApi.Controllers
 
         //}
 
-        //// DELETE home/waiter/5
-        //// Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
-        //// Example of Body:
-        //// 2
-        //public HttpResponseMessage Delete([FromBody] int id)
-        //{
+        // DELETE home/waiter/5
+        // Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
+        // Example of Body:
+        // 2
+        [HttpDelete]
+        [Route("home/chef/delete-chef/{id}")]
+        public HttpResponseMessage Delete([FromUri] Guid id)
+        {
 
-        //    try
-        //    {
-        //        ChefModel chefToRemove = chefs.FirstOrDefault(c => c.Id == id);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
 
-        //        if (chefToRemove == null)
-        //        {
-        //            return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist or has already been deleted");
-        //        }
-
-        //        chefs.Remove(chefToRemove);
-
-        //        return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToRemove);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while deleting a chef via DELETE. {ex.Message}");
-        //    }
+                    SqlCommand cm = new SqlCommand("Delete from chef where Id = @id", connection);
 
 
-        //}
+                    cm.Parameters.AddWithValue("@Id", id);
+
+
+                    connection.Open();
+                    int rowsAffected = cm.ExecuteNonQuery();
+                    connection.Close();
 
 
 
+                    // Executing the SQL query  
+
+
+                    if (rowsAffected > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, id);
+                    }
+
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+
+        }
 
     }
 }
