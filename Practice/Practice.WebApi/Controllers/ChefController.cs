@@ -17,9 +17,9 @@ namespace Practice.WebApi.Controllers
 {
     public class ChefController : ApiController
     {
+        string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
-       
-        
+
 
         //public static List<ChefModel> chefs = new List<ChefModel>()
         //{
@@ -30,9 +30,11 @@ namespace Practice.WebApi.Controllers
         //};
 
         // GET home/chef/all
+        [HttpGet]
+        [Route("home/chef/get-all/")]
         public HttpResponseMessage Get()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
+            
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -79,37 +81,67 @@ namespace Practice.WebApi.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("OOPs, something went wrong.\n" + e);
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Something went wrong while processing your request.");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
             }
         }
 
-        //// GET home/waiter/5
-        //public HttpResponseMessage Get(int id)
-        //{
-        //    try
-        //    {
-        //        ChefModel singleChef = chefs.FirstOrDefault(c => c.Id == id);
+        // GET home/waiter/5
+        [HttpGet]
+        [Route("home/chef/get-by-id/{id}")]
+        public HttpResponseMessage Get(Guid id)
+        {
+            
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                   
+                    SqlCommand cm = new SqlCommand("select * from chef where Id=@id", connection);
 
-        //        if (singleChef != null)
-        //        {
-        //            return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, singleChef);
-        //        }
+                    cm.Parameters.AddWithValue("@id", id);
 
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
+                    connection.Open();
+                   
+                    SqlDataReader reader = cm.ExecuteReader();
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occured while executing Get chef by id. {ex.Message}");
-        //    }
-        //}
+                    ChefModel chef = new ChefModel();
 
-        //// POST home/waiter
-        //// Use [FromUri] attribute to force Web API to post the value of complex type from the query string
-        //// Example of URI:
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool
-        //public HttpResponseMessage Post([FromUri] ChefModel chef)
+                    if (reader.HasRows)
+                    {
+                        if (reader.Read())
+                        {
+                            chef.Id = (Guid)reader["Id"];
+                            chef.FirstName = (string)reader["FirstName"];
+                            chef.LastName = (string)reader["LastName"];
+                            chef.PhoneNumber = (string)reader["PhoneNumber"];
+                            chef.HomeAddress = (string)reader["HomeAddress"];
+                            chef.Certified = (bool)reader["Certified"];
+                            chef.OIB = (string)reader["OIB"];
+                            chef.HireDate = (DateTime)reader["HireDate"];
+                        }
+                    }
+
+                    reader.Close();
+
+                    if (chef != null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    }
+
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                }
+                        
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+        }
+
+        // POST home/chef
+        //[HttpGet]
+        //[Route("home/chef/create-chef")]
+        //public HttpResponseMessage Post([FromBody] ChefModel chef)
         //{
 
         //    try
