@@ -11,6 +11,7 @@ using Practice.WebApi.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Runtime.Remoting.Messaging;
+using System.Configuration;
 
 namespace Practice.WebApi.Controllers
 {
@@ -31,7 +32,7 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         public HttpResponseMessage Get()
         {
-            string connectionString = "Data Source=ST-02\\SQLEXPRESS;Initial Catalog=Restaurant;Integrated Security=True";
+            string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -95,12 +96,12 @@ namespace Practice.WebApi.Controllers
         //            return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, singleChef);
         //        }
 
-        //       return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
+        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Employee Not Found");
 
         //    }
         //    catch (Exception ex)
         //    {
-        //         return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occured while executing Get chef by id. {ex.Message}");
+        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occured while executing Get chef by id. {ex.Message}");
         //    }
         //}
 
@@ -140,7 +141,7 @@ namespace Practice.WebApi.Controllers
         //{
         //    try
         //    {
-               
+
 
         //        ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
         //        if (chefToUpdate == null)
@@ -152,7 +153,7 @@ namespace Practice.WebApi.Controllers
         //        {
         //            App_Start.Logger.createTxtFSSW("Model state is not valid");
         //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-                    
+
         //        }
 
         //        chefToUpdate.FirstName = chef.FirstName;
@@ -194,7 +195,7 @@ namespace Practice.WebApi.Controllers
         //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while deleting a chef via DELETE. {ex.Message}");
         //    }
 
-           
+
         //}
 
 
