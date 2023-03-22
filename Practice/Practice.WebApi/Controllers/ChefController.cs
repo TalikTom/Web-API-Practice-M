@@ -156,8 +156,9 @@ namespace Practice.WebApi.Controllers
                     SqlCommand cm = new SqlCommand("INSERT INTO chef (Id, FirstName, LastName, PhoneNumber, HomeAddress, Certified, OIB, HireDate) " +
                      "VALUES (@Id, @FirstName, @LastName, @PhoneNumber, @HomeAddress, @Certified, @OIB, @HireDate)", connection);
 
+                    chef.Id = Guid.NewGuid();
 
-                    cm.Parameters.AddWithValue("@Id", Guid.NewGuid());
+                    cm.Parameters.AddWithValue("@Id", chef.Id);
                     cm.Parameters.AddWithValue("@FirstName", chef.FirstName);
                     cm.Parameters.AddWithValue("@LastName", chef.LastName);
                     cm.Parameters.AddWithValue("@PhoneNumber", chef.PhoneNumber);
