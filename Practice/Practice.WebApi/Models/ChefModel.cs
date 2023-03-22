@@ -30,7 +30,6 @@ namespace Practice.WebApi.Models
 
         public DateTime HireDate { get; set; }
 
-        public DateTime StartDate { get; set; }
 
 
     }
