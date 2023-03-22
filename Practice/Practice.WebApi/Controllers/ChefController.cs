@@ -15,6 +15,9 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlTypes;
+using static System.Collections.Specialized.BitVector32;
+using System.Reflection;
+using System.Xml.Linq;
 
 namespace Practice.WebApi.Controllers
 {
@@ -192,47 +195,69 @@ namespace Practice.WebApi.Controllers
 
         }
 
-        //// PUT home/waiter/5
-        //// Use [FromUri] attribute to force Web API to update the value of complex type from the query string
-        //// Example of URI:
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
-        //public HttpResponseMessage Put(int id, [FromUri] ChefModel chef)
-        //{
-        //    try
-        //    {
+        // PUT home/waiter/
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
+        [HttpPut]
+        [Route("home/chef/update-chef/{id}")]
+        public HttpResponseMessage Put(Guid id, [FromBody] ChefModel chef)
+        {
+            
+                if (!Helper.Checker.CheckId(id))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+            }
+              
+                if (!ModelState.IsValid)
+                {
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+                }
+       
+          
+          try
+
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
+                   
+                    cm.Parameters.AddWithValue("@Id", id);
+                    cm.Parameters.AddWithValue("@FirstName", chef.FirstName);
+                    cm.Parameters.AddWithValue("@LastName", chef.LastName);
+                    cm.Parameters.AddWithValue("@PhoneNumber", chef.PhoneNumber);
+                    cm.Parameters.AddWithValue("@HomeAddress", chef.HomeAddress);
+                    cm.Parameters.AddWithValue("@Certified", chef.Certified);
+                    cm.Parameters.AddWithValue("@OIB", chef.OIB);
+                    cm.Parameters.AddWithValue("@HireDate", chef.HireDate);
+
+                    connection.Open();
+                    int rowsAffected = cm.ExecuteNonQuery();
+                    connection.Close();
 
 
-        //        ChefModel chefToUpdate = chefs.FirstOrDefault(c => c.Id == id);
-        //        if (chefToUpdate == null)
-        //        {
-        //            return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the requested ID doesn't exist");
-        //        }
 
-        //        if (!ModelState.IsValid)
-        //        {
-        //            App_Start.Logger.createTxtFSSW("Model state is not valid");
-        //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                    // Executing the SQL query  
 
-        //        }
 
-        //        chefToUpdate.FirstName = chef.FirstName;
-        //        chefToUpdate.LastName = chef.LastName;
-        //        chefToUpdate.StartDate = chef.StartDate;
-        //        chefToUpdate.Certified = chef.Certified;
+                    if (rowsAffected > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    }
 
-        //        return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chefToUpdate);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while updating a chef via PUT. {ex.Message}");
-        //    }
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
 
-        //}
+        }
 
-        // DELETE home/waiter/5
-        // Use[FromBody] attribute to force Web API to delete the value of primitive type from the body
-        // Example of Body:
-        // 2
+
+        //DELETE home/delete-chef/{id}
+
         [HttpDelete]
         [Route("home/chef/delete-chef/{id}")]
         public HttpResponseMessage Delete([FromUri] Guid id)
