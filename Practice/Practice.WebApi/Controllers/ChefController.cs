@@ -12,6 +12,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Runtime.Remoting.Messaging;
 using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlTypes;
 
 namespace Practice.WebApi.Controllers
 {
@@ -138,32 +141,54 @@ namespace Practice.WebApi.Controllers
             }
         }
 
-        // POST home/chef
-        //[HttpGet]
-        //[Route("home/chef/create-chef")]
-        //public HttpResponseMessage Post([FromBody] ChefModel chef)
-        //{
+       //POST home/chef
+       [HttpPost]
+       [Route("home/chef/add-chef")]
+        public HttpResponseMessage Post([FromBody] ChefModel chef)
+        {
 
-        //    try
-        //    {
-        //        if (chefs.Any(c => c.Id == chef.Id))
-        //        {
-        //            return Request.CreateErrorResponse(HttpStatusCode.Conflict, "A chef with the same ID already exists.");
-        //        }
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
 
-        //        chef.Id = chefs.Count + 1;
-        //        chef.StartDate = DateTime.Now;
-        //        chefs.Add(chef);
-
-        //        return Request.CreateResponse<ChefModel>(HttpStatusCode.OK, chef);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Error occurred while creating a new chef via POST. {ex.Message}");
-        //    }
+                    SqlCommand cm = new SqlCommand("INSERT INTO chef (Id, FirstName, LastName, PhoneNumber, HomeAddress, Certified, OIB, HireDate) " +
+                     "VALUES (@Id, @FirstName, @LastName, @PhoneNumber, @HomeAddress, @Certified, @OIB, @HireDate)", connection);
 
 
-        //}
+                    cm.Parameters.AddWithValue("@Id", Guid.NewGuid());
+                    cm.Parameters.AddWithValue("@FirstName", chef.FirstName);
+                    cm.Parameters.AddWithValue("@LastName", chef.LastName);
+                    cm.Parameters.AddWithValue("@PhoneNumber", chef.PhoneNumber);
+                    cm.Parameters.AddWithValue("@HomeAddress", chef.HomeAddress);
+                    cm.Parameters.AddWithValue("@Certified", chef.Certified);
+                    cm.Parameters.AddWithValue("@OIB", chef.OIB);
+                    cm.Parameters.AddWithValue("@HireDate", chef.HireDate);
+
+                    connection.Open();
+                    int rowsAffected = cm.ExecuteNonQuery();
+                    connection.Close();
+
+
+                    
+                    // Executing the SQL query  
+                   
+
+                    if (rowsAffected > 0)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    }
+
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+
+        }
 
         //// PUT home/waiter/5
         //// Use [FromUri] attribute to force Web API to update the value of complex type from the query string
