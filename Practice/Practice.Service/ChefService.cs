@@ -37,6 +37,17 @@ namespace Practice.Service
 
             return chef;
         }
+
+
+        public bool Put(Guid id, ChefModel chef)
+        {
+            ChefRepository chefRepository = new ChefRepository();
+            bool chefCheck = chefRepository.Put(id, chef);
+
+            return chefCheck;
+        }
+
+
         public bool Delete(Guid id)
         {
             ChefRepository chefRepository = new ChefRepository();

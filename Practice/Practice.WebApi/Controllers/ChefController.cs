@@ -28,14 +28,6 @@ namespace Practice.WebApi.Controllers
 
 
 
-        //public static List<ChefModel> chefs = new List<ChefModel>()
-        //{
-        //       new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = new DateTime(2022, 1, 1, 10, 2, 0), Id = 1, Certified = false},
-        //       new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = new DateTime(2022, 1, 1, 15, 45, 0), Id = 2, Certified = true},
-        //       new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = new DateTime(2022, 1, 5, 1, 0, 0), Id = 3, Certified = false},
-        //       new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = new DateTime(2021, 12, 1, 10, 0, 30), Id = 4, Certified = true},
-        //};
-
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
@@ -128,53 +120,21 @@ namespace Practice.WebApi.Controllers
         public HttpResponseMessage Put(Guid id, [FromBody] ChefModel chef)
         {
 
-            if (!Helper.Checker.CheckId(id))
-
-
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                App_Start.Logger.createTxtFSSW("Model state is not valid");
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-
-            }
-
-
             try
 
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                ChefService chefService = new ChefService();
+
+                bool chefCheck = chefService.Put(id, chef);
+
+
+                if (chefCheck == true)
                 {
-                    SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
-
-                    cm.Parameters.AddWithValue("@Id", id);
-                    cm.Parameters.AddWithValue("@FirstName", chef.FirstName);
-                    cm.Parameters.AddWithValue("@LastName", chef.LastName);
-                    cm.Parameters.AddWithValue("@PhoneNumber", chef.PhoneNumber);
-                    cm.Parameters.AddWithValue("@HomeAddress", chef.HomeAddress);
-                    cm.Parameters.AddWithValue("@Certified", chef.Certified);
-                    cm.Parameters.AddWithValue("@OIB", chef.OIB);
-                    cm.Parameters.AddWithValue("@HireDate", chef.HireDate);
-
-                    connection.Open();
-                    int rowsAffected = cm.ExecuteNonQuery();
-                    connection.Close();
-
-
-
-                    // Executing the SQL query  
-
-
-                    if (rowsAffected > 0)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.OK, chef);
-                    }
-
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                    return Request.CreateResponse(HttpStatusCode.OK, chef);
                 }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+
             }
             catch (Exception e)
             {
