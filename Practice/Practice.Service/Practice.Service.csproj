@@ -46,6 +46,18 @@
     <Compile Include="WaiterService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Practice.Common\Practice.Common.csproj">
+      <Project>{54b15ca2-ef54-4881-8b3a-589fc4c25968}</Project>
+      <Name>Practice.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Model\Practice.Model.csproj">
+      <Project>{3b50ecb6-84f2-42f0-9315-730cafb30d61}</Project>
+      <Name>Practice.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Repository\Practice.Repository.csproj">
+      <Project>{9b57862f-839a-4a1c-9a53-ea1270805f4b}</Project>
+      <Name>Practice.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Practice.Service.Common\Practice.Service.Common.csproj">
       <Project>{53f5ff9b-b311-427f-b6ae-04da5bebc536}</Project>
       <Name>Practice.Service.Common</Name>

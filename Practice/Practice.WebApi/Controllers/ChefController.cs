@@ -18,6 +18,7 @@ using static System.Collections.Specialized.BitVector32;
 using System.Reflection;
 using System.Xml.Linq;
 using Practice.Model;
+using Practice.Service;
 
 namespace Practice.WebApi.Controllers
 {
@@ -38,52 +39,24 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public HttpResponseMessage Get()
+        public HttpResponseMessage GetAll()
         {
             
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                ChefService chefService = new ChefService();
+
+                List<ChefModel> chefs = chefService.GetAll();
+
+                chefs = chefService.GetAll();
+
+                if (chefs == null)
                 {
-                    // Creating SqlCommand object   
-                    SqlCommand cm = new SqlCommand("select * from chef", connection);
-
-                    List<ChefModel> chefs = new List<ChefModel>();
-                    // Opening Connection  
-                    connection.Open();
-                    // Executing the SQL query  
-                    SqlDataReader reader = cm.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            ChefModel chef = new ChefModel();
-
-                            chef.Id = (Guid)reader["Id"];
-                            chef.FirstName = (string)reader["FirstName"];
-                            chef.LastName = (string)reader["LastName"];
-                            chef.PhoneNumber = (string)reader["PhoneNumber"];
-
-                            chef.HomeAddress = (string)reader["HomeAddress"];
-                            chef.Certified = (bool)reader["Certified"];
-                            chef.OIB = (string)reader["OIB"];
-                            chef.HireDate = (DateTime)reader["HireDate"];
-
-
-                            chefs.Add(chef);
-                        }
-                    }
-
-                    reader.Close(); // close the SqlDataReader object
-
-                    if (chefs.Count > 0)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.OK, chefs);
-                    }
-                    
-                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-                    
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
+
+                return Request.CreateResponse(HttpStatusCode.OK, chefs);
+
             }
             catch (Exception e)
             {

@@ -45,5 +45,11 @@
     <Compile Include="IWaiterService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Practice.Model\Practice.Model.csproj">
+      <Project>{3B50ECB6-84F2-42F0-9315-730CAFB30D61}</Project>
+      <Name>Practice.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
