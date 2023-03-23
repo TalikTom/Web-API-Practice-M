@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Practice.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Practice.Model
 {
-    public class ChefModel
+    public class ChefModel : IChefModel
     {
 
         public Guid Id { get; set; }
