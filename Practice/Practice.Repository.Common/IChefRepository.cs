@@ -11,5 +11,6 @@ namespace Practice.Repository.Common
     {
         List<ChefModel> GetAll();
         ChefModel Get(Guid id);
+        bool Delete(Guid id);
     }
 }

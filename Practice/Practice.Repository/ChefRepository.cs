@@ -19,18 +19,6 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-
-        //public static List<ChefModel> chefs = new List<ChefModel>()
-        //{
-        //       new ChefModel { FirstName = "Djordje", LastName = "Balasevic", StartDate = new DateTime(2022, 1, 1, 10, 2, 0), Id = 1, Certified = false},
-        //       new ChefModel { FirstName = "Ciro", LastName = "Gasparac", StartDate = new DateTime(2022, 1, 1, 15, 45, 0), Id = 2, Certified = true},
-        //       new ChefModel { FirstName = "Maksim", LastName = "Mrvica", StartDate = new DateTime(2022, 1, 5, 1, 0, 0), Id = 3, Certified = false},
-        //       new ChefModel { FirstName = "Himzo", LastName = "Polovina", StartDate = new DateTime(2021, 12, 1, 10, 0, 30), Id = 4, Certified = true},
-        //};
-
-        // GET home/chef/all
-        [HttpGet]
-        [Route("home/chef/get-all/")]
         public List<ChefModel> GetAll()
         {
 
@@ -38,13 +26,13 @@ namespace Practice.Repository
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    // Creating SqlCommand object   
+
                     SqlCommand cm = new SqlCommand("select * from chef", connection);
 
                     List<ChefModel> chefs = new List<ChefModel>();
-                    // Opening Connection  
+
                     connection.Open();
-                    // Executing the SQL query  
+
                     SqlDataReader reader = cm.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -70,25 +58,23 @@ namespace Practice.Repository
                     }
 
 
-                    reader.Close(); // close the SqlDataReader object
+                    reader.Close();
 
                     if (chefs.Count > 0)
                     {
-                        return null; /*Request.CreateResponse(HttpStatusCode.OK, chefs);*/
+                        return null;
                     }
 
-                    return null; /*Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found")*/;
-
+                    return null;
                 }
             }
             catch (Exception e)
             {
-                return null;/*Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");*/
-            }
+                return null;
+            }          
+
         }
 
-        [HttpGet]
-        [Route("home/chef/get-by-id/{id}")]
         public ChefModel Get(Guid id)
         {
 
@@ -128,18 +114,46 @@ namespace Practice.Repository
 
                     if (chef != null)
                     {
-                        return null; /*Request.CreateResponse(HttpStatusCode.OK, chef);*/
+                        return null;
                     }
 
-                    return null; /*Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");*/
+                    return null;
                 }
 
             }
             catch (Exception e)
             {
-                return null;/*Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");*/
+                return null;
             }
         }
 
+        public bool Delete(Guid id)
+        {
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+
+                SqlCommand cm = new SqlCommand("Delete from chef where Id = @id", connection);
+
+
+                cm.Parameters.AddWithValue("@Id", id);
+
+
+                connection.Open();
+                int rowsAffected = cm.ExecuteNonQuery();
+                connection.Close();
+
+
+
+                if (rowsAffected > 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+        }
     }
 }
