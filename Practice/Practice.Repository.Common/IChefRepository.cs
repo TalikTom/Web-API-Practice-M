@@ -16,5 +16,7 @@ namespace Practice.Repository.Common
         bool Delete(Guid id);
 
         ChefModel Post(ChefModel chef);
+
+        bool Put(Guid id, ChefModel chef);
     }
 }
