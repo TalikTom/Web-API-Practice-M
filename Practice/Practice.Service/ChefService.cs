@@ -29,6 +29,14 @@ namespace Practice.Service
             return chef;
         }
 
+
+        public ChefModel Post(ChefModel chef)
+        {
+            ChefRepository chefRepository = new ChefRepository();
+            chef = chefRepository.Post(chef);
+
+            return chef;
+        }
         public bool Delete(Guid id)
         {
             ChefRepository chefRepository = new ChefRepository();

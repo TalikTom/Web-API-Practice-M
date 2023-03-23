@@ -10,7 +10,11 @@ namespace Practice.Repository.Common
     public interface IChefRepository
     {
         List<ChefModel> GetAll();
+
         ChefModel Get(Guid id);
+
         bool Delete(Guid id);
+
+        ChefModel Post(ChefModel chef);
     }
 }
