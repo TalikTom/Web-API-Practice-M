@@ -41,7 +41,17 @@ namespace Practice.Service
 
         public bool Put(Guid id, ChefModel chef)
         {
+          
+
             ChefRepository chefRepository = new ChefRepository();
+
+            ChefModel chefExist = chefRepository.Get(id);
+
+            if (chefExist == null)
+            {
+                return false;
+            }
+
             bool chefCheck = chefRepository.Put(id, chef);
 
             return chefCheck;
@@ -50,7 +60,16 @@ namespace Practice.Service
 
         public bool Delete(Guid id)
         {
+            
             ChefRepository chefRepository = new ChefRepository();
+
+            ChefModel chefExist = chefRepository.Get(id);
+
+            if (chefExist == null)
+            {
+                return false;
+            }
+
             bool chef = chefRepository.Delete(id);
 
             return chef;

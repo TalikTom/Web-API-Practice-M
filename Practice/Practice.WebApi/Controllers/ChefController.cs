@@ -127,6 +127,12 @@ namespace Practice.WebApi.Controllers
 
                 bool chefCheck = chefService.Put(id, chef);
 
+                if (!ModelState.IsValid)
+                {
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+                }
 
                 if (chefCheck == true)
                 {

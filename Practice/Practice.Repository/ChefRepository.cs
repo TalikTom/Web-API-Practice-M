@@ -163,22 +163,7 @@ namespace Practice.Repository
         public bool Put(Guid id, ChefModel chef)
         {
 
-            if (!Practice.Common.Helper.Checker.CheckId(id))
-
-
-            {
-                return false;
-            }
-
-            //if (!ModelState.IsValid)
-            //{
-            //    App_Start.Logger.createTxtFSSW("Model state is not valid");
-            //    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-
-            //}
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+           using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
 
@@ -209,7 +194,6 @@ namespace Practice.Repository
 
         public bool Delete(Guid id)
         {
-
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
