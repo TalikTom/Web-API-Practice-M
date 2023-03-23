@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Practice.Model.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Practice.WebApi.Models
+namespace Practice.Model
 {
-    public class WaiterModel
+    public class WaiterModel : IWaiterModel
     {
         public string FirstName { get; set; }
 
