@@ -20,5 +20,13 @@ namespace Practice.Service
             return chefs;
         }
 
+
+        public ChefModel Get(Guid id)
+        {
+            ChefRepository chefRepository = new ChefRepository();
+            ChefModel chef = chefRepository.Get(id);
+
+            return chef;
+        }
     }
 }
