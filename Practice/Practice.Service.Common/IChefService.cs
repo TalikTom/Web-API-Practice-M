@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Practice.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace Practice.Service.Common
 {
     public interface IChefService
     {
+        List<ChefModel> GetAll();
     }
 }

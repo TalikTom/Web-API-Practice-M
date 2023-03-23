@@ -1,4 +1,6 @@
-﻿using Practice.Service.Common;
+﻿using Practice.Model;
+using Practice.Repository;
+using Practice.Service.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,16 @@ using System.Threading.Tasks;
 
 namespace Practice.Service
 {
-    public interface ChefService : IChefService
+    public class ChefService : IChefService
     {
+
+        public List<ChefModel> GetAll()
+        {
+            ChefRepository chefRepository = new ChefRepository();
+            List<ChefModel> chefs = chefRepository.GetAll();
+
+            return chefs;
+        }
+
     }
 }
