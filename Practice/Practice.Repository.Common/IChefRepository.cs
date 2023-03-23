@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Practice.Service
+namespace Practice.Repository.Common
 {
-    public class Class1
+    public interface IChefRepository
     {
     }
 }

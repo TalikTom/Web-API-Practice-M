@@ -7,7 +7,6 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Razor.Generator;
 using Microsoft.Extensions.Logging;
-using Practice.WebApi.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Runtime.Remoting.Messaging;
