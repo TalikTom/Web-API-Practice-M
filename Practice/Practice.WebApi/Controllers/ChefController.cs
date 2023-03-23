@@ -209,37 +209,25 @@ namespace Practice.WebApi.Controllers
 
         [HttpDelete]
         [Route("home/chef/delete-chef/{id}")]
-        public HttpResponseMessage Delete([FromUri] Guid id)
+        public HttpResponseMessage Delete(Guid id)
         {
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
+                ChefService chefService = new ChefService();
 
-                    SqlCommand cm = new SqlCommand("Delete from chef where Id = @id", connection);
-
-
-                    cm.Parameters.AddWithValue("@Id", id);
-
-
-                    connection.Open();
-                    int rowsAffected = cm.ExecuteNonQuery();
-                    connection.Close();
+                bool chef = chefService.Delete(id);
 
 
 
-                    // Executing the SQL query  
-
-
-                    if (rowsAffected > 0)
+                if (chef == true)
                     {
                         return Request.CreateResponse(HttpStatusCode.OK, id);
                     }
 
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
                 }
-            }
+            
             catch (Exception e)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");

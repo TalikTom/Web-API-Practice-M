@@ -28,5 +28,13 @@ namespace Practice.Service
 
             return chef;
         }
+
+        public bool Delete(Guid id)
+        {
+            ChefRepository chefRepository = new ChefRepository();
+            bool chef = chefRepository.Delete(id);
+
+            return chef;
+        }
     }
 }
