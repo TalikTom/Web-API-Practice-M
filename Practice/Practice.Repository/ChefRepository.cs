@@ -22,8 +22,7 @@ namespace Practice.Repository
         public List<ChefModel> GetAll()
         {
 
-            try
-            {
+           
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
 
@@ -67,19 +66,15 @@ namespace Practice.Repository
 
                     return null;
                 }
-            }
-            catch (Exception e)
-            {
-                return null;
-            }          
+          
+                  
 
         }
 
         public ChefModel Get(Guid id)
         {
 
-            try
-            {
+           
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
 
@@ -120,11 +115,48 @@ namespace Practice.Repository
                     return null;
                 }
 
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            
+           
+        }
+
+
+        public ChefModel Post(ChefModel chef)
+        {
+
+            
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    SqlCommand cm = new SqlCommand("INSERT INTO chef (Id, FirstName, LastName, PhoneNumber, HomeAddress, Certified, OIB, HireDate) " +
+                     "VALUES (@Id, @FirstName, @LastName, @PhoneNumber, @HomeAddress, @Certified, @OIB, @HireDate)", connection);
+
+                    chef.Id = Guid.NewGuid();
+
+                    cm.Parameters.AddWithValue("@Id", chef.Id);
+                    cm.Parameters.AddWithValue("@FirstName", chef.FirstName);
+                    cm.Parameters.AddWithValue("@LastName", chef.LastName);
+                    cm.Parameters.AddWithValue("@PhoneNumber", chef.PhoneNumber);
+                    cm.Parameters.AddWithValue("@HomeAddress", chef.HomeAddress);
+                    cm.Parameters.AddWithValue("@Certified", chef.Certified);
+                    cm.Parameters.AddWithValue("@OIB", chef.OIB);
+                    cm.Parameters.AddWithValue("@HireDate", chef.HireDate);
+
+                    connection.Open();
+
+                    int rowsAffected = cm.ExecuteNonQuery();
+
+                    connection.Close();
+
+
+                    if (rowsAffected > 0)
+                    {
+                        return chef;
+                    }
+
+                    return null;
+                }
+
+
         }
 
         public bool Delete(Guid id)
