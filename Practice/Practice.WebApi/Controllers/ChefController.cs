@@ -147,7 +147,7 @@ namespace Practice.WebApi.Controllers
         //POST home/chef
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
         [HttpPost]
-       [Route("home/chef/add-chef")]
+        [Route("home/chef/add-chef")]
         public HttpResponseMessage Post([FromBody] ChefModel chef)
         {
 
@@ -203,6 +203,8 @@ namespace Practice.WebApi.Controllers
         {
             
                 if (!Helper.Checker.CheckId(id))
+
+
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
             }
