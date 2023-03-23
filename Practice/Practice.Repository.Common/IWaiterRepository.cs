@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Practice.Repository.Common
 {
-    public class Class1
+    public interface IWaiterRepository
     {
     }
 }

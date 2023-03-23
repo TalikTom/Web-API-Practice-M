@@ -6,7 +6,7 @@ using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using Practice.WebApi.Models;
+using Practice.Model;
 
 namespace Practice.WebApi.Controllers
 {
