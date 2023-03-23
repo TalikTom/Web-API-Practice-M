@@ -69,47 +69,21 @@ namespace Practice.WebApi.Controllers
         [Route("home/chef/get-by-id/{id}")]
         public HttpResponseMessage Get(Guid id)
         {
-            
+
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                ChefService chefService = new ChefService();
+
+                ChefModel chef = chefService.Get(id);
+
+                
+                if (chef == null)
                 {
-                   
-                    SqlCommand cm = new SqlCommand("select * from chef where Id=@id", connection);
-
-                    cm.Parameters.AddWithValue("@id", id);
-
-                    connection.Open();
-                   
-                    SqlDataReader reader = cm.ExecuteReader();
-
-                    ChefModel chef = new ChefModel();
-
-                    if (reader.HasRows)
-                    {
-                        if (reader.Read())
-                        {
-                            chef.Id = (Guid)reader["Id"];
-                            chef.FirstName = (string)reader["FirstName"];
-                            chef.LastName = (string)reader["LastName"];
-                            chef.PhoneNumber = (string)reader["PhoneNumber"];
-                            chef.HomeAddress = (string)reader["HomeAddress"];
-                            chef.Certified = (bool)reader["Certified"];
-                            chef.OIB = (string)reader["OIB"];
-                            chef.HireDate = (DateTime)reader["HireDate"];
-                        }
-                    }
-
-                    reader.Close();
-
-                    if (chef != null)
-                    {
-                        return Request.CreateResponse(HttpStatusCode.OK, chef);
-                    }
-
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-                        
+
+                return Request.CreateResponse(HttpStatusCode.OK, chef);
+
             }
             catch (Exception e)
             {

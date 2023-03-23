@@ -87,5 +87,59 @@ namespace Practice.Repository
             }
         }
 
+        [HttpGet]
+        [Route("home/chef/get-by-id/{id}")]
+        public ChefModel Get(Guid id)
+        {
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+
+                    SqlCommand cm = new SqlCommand("select * from chef where Id=@id", connection);
+
+                    cm.Parameters.AddWithValue("@id", id);
+
+                    connection.Open();
+
+                    SqlDataReader reader = cm.ExecuteReader();
+
+                    ChefModel chef = new ChefModel();
+
+                    if (reader.HasRows)
+                    {
+                        if (reader.Read())
+                        {
+                            chef.Id = (Guid)reader["Id"];
+                            chef.FirstName = (string)reader["FirstName"];
+                            chef.LastName = (string)reader["LastName"];
+                            chef.PhoneNumber = (string)reader["PhoneNumber"];
+                            chef.HomeAddress = (string)reader["HomeAddress"];
+                            chef.Certified = (bool)reader["Certified"];
+                            chef.OIB = (string)reader["OIB"];
+                            chef.HireDate = (DateTime)reader["HireDate"];
+                        }
+
+                        return chef;
+                    }
+
+                    reader.Close();
+
+                    if (chef != null)
+                    {
+                        return null; /*Request.CreateResponse(HttpStatusCode.OK, chef);*/
+                    }
+
+                    return null; /*Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");*/
+                }
+
+            }
+            catch (Exception e)
+            {
+                return null;/*Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");*/
+            }
+        }
+
     }
 }
