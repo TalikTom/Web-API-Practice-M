@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Practice.WebApi.Models
 {
-    public class ChefRest
+    public class ChefRestGet
     {
 
        
