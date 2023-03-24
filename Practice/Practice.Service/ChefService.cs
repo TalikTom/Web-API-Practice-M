@@ -12,65 +12,65 @@ namespace Practice.Service
     public class ChefService : IChefService
     {
 
-        public List<ChefModel> GetAll()
+        public async Task<List<ChefModel>> GetAllAsync()
         {
             ChefRepository chefRepository = new ChefRepository();
-            List<ChefModel> chefs = chefRepository.GetAll();
+            List<ChefModel> chefs = await chefRepository.GetAllAsync();
 
             return chefs;
         }
 
 
-        public ChefModel Get(Guid id)
+        public async Task<ChefModel> GetAsync(Guid id)
         {
             ChefRepository chefRepository = new ChefRepository();
-            ChefModel chef = chefRepository.Get(id);
+            ChefModel chef = await chefRepository.GetAsync(id);
 
             return chef;
         }
 
 
-        public ChefModel Post(ChefModel chef)
+        public async Task<ChefModel> PostAsync(ChefModel chef)
         {
             ChefRepository chefRepository = new ChefRepository();
-            chef = chefRepository.Post(chef);
+            chef = await chefRepository.PostAsync(chef);
 
             return chef;
         }
 
 
-        public bool Put(Guid id, ChefModel chef)
+        public async Task<bool> PutAsync(Guid id, ChefModel chef)
         {
           
 
             ChefRepository chefRepository = new ChefRepository();
 
-            ChefModel chefExist = chefRepository.Get(id);
+            ChefModel chefExist = await chefRepository.GetAsync(id);
 
             if (chefExist == null)
             {
                 return false;
             }
 
-            bool chefCheck = chefRepository.Put(id, chef);
+            bool chefCheck = await chefRepository.PutAsync(id, chef);
 
             return chefCheck;
         }
 
 
-        public bool Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             
             ChefRepository chefRepository = new ChefRepository();
 
-            ChefModel chefExist = chefRepository.Get(id);
+            ChefModel chefExist = await chefRepository.GetAsync(id);
 
             if (chefExist == null)
             {
                 return false;
             }
 
-            bool chef = chefRepository.Delete(id);
+            bool chef = await chefRepository.DeleteAsync(id);
 
             return chef;
         }

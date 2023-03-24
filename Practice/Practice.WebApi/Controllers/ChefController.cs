@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using Practice.Model;
 using Practice.Service;
+using System.Threading.Tasks;
 
 namespace Practice.WebApi.Controllers
 {
@@ -31,16 +32,16 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public HttpResponseMessage GetAll()
+        public async Task<HttpResponseMessage> GetAllAsync()
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                List<ChefModel> chefs = chefService.GetAll();
+                List<ChefModel> chefs = await chefService.GetAllAsync();
 
-                chefs = chefService.GetAll();
+                chefs = await chefService.GetAllAsync();
 
                 if (chefs == null)
                 {
@@ -59,14 +60,14 @@ namespace Practice.WebApi.Controllers
         // GET home/waiter/5
         [HttpGet]
         [Route("home/chef/get-by-id/{id}")]
-        public HttpResponseMessage Get(Guid id)
+        public async Task<HttpResponseMessage> GetAsync(Guid id)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                ChefModel chef = chefService.Get(id);
+                ChefModel chef = await chefService.GetAsync(id);
 
 
                 if (chef == null)
@@ -87,13 +88,13 @@ namespace Practice.WebApi.Controllers
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
         [HttpPost]
         [Route("home/chef/add-chef")]
-        public HttpResponseMessage Post([FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefModel chef)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
-                chef = chefService.Post(chef);
+                chef = await chefService.PostAsync(chef);
 
 
                 if (chef != null)
@@ -117,7 +118,7 @@ namespace Practice.WebApi.Controllers
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
         [HttpPut]
         [Route("home/chef/update-chef/{id}")]
-        public HttpResponseMessage Put(Guid id, [FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefModel chef)
         {
 
             try
@@ -125,7 +126,7 @@ namespace Practice.WebApi.Controllers
             {
                 ChefService chefService = new ChefService();
 
-                bool chefCheck = chefService.Put(id, chef);
+                bool chefCheck = await chefService.PutAsync(id, chef);
 
                 if (!ModelState.IsValid)
                 {
@@ -154,14 +155,14 @@ namespace Practice.WebApi.Controllers
 
         [HttpDelete]
         [Route("home/chef/delete-chef/{id}")]
-        public HttpResponseMessage Delete(Guid id)
+        public async Task<HttpResponseMessage> DeleteAsync(Guid id)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                bool chef = chefService.Delete(id);
+                bool chef = await chefService.DeleteAsync(id);
 
 
                 if (chef == true)
