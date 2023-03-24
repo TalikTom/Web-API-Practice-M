@@ -58,6 +58,7 @@ namespace Practice.WebApi.Controllers
                     ChefRest chefRest = new ChefRest();
                     chefRest.FirstName = chef.FirstName;
                     chefRest.LastName = chef.LastName;
+                    chefRest.HireDate = chef.HireDate;
                     mappedChefs.Add(chefRest);
 
                 }
@@ -89,7 +90,7 @@ namespace Practice.WebApi.Controllers
 
                 chefRest.FirstName = chef.FirstName;
                 chefRest.LastName = chef.LastName;
-
+                chefRest.HireDate = chef.HireDate;
 
                 if (chef == null)
                 {
@@ -117,10 +118,15 @@ namespace Practice.WebApi.Controllers
                 ChefService chefService = new ChefService();
                 chef = await chefService.PostAsync(chef);
 
+                ChefRest chefRest = new ChefRest();
+
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+                chefRest.HireDate = chef.HireDate;
 
                 if (chef != null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRest);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
@@ -135,6 +141,7 @@ namespace Practice.WebApi.Controllers
 
         }
 
+
         // PUT home/waiter/
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
         [HttpPut]
@@ -147,6 +154,12 @@ namespace Practice.WebApi.Controllers
             {
                 ChefService chefService = new ChefService();
 
+                ChefRest chefRest = new ChefRest();
+
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+                chefRest.HireDate = chef.HireDate;
+
                 bool chefCheck = await chefService.PutAsync(id, chef);
 
                 if (!ModelState.IsValid)
@@ -158,7 +171,7 @@ namespace Practice.WebApi.Controllers
 
                 if (chefCheck == true)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRest);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
@@ -185,7 +198,9 @@ namespace Practice.WebApi.Controllers
 
                 bool chef = await chefService.DeleteAsync(id);
 
+                ChefRest chefRest = new ChefRest();
 
+                
                 if (chef == true)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, id);
