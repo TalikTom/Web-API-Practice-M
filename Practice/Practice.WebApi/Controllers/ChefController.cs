@@ -42,7 +42,7 @@ namespace Practice.WebApi.Controllers
 
                 List<ChefModel> chefs = await chefService.GetAllAsync();
 
-                List<ChefRest> mappedChefs = new List<ChefRest>();
+                List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
                 chefs = await chefService.GetAllAsync();
 
@@ -55,7 +55,7 @@ namespace Practice.WebApi.Controllers
 
                 foreach (ChefModel chef in chefs)
                 {
-                    ChefRest chefRest = new ChefRest();
+                    ChefRestGet chefRest = new ChefRestGet();
                     chefRest.FirstName = chef.FirstName;
                     chefRest.LastName = chef.LastName;
                     chefRest.HireDate = chef.HireDate;
@@ -86,7 +86,7 @@ namespace Practice.WebApi.Controllers
 
                 ChefModel chef = await chefService.GetAsync(id);
 
-                ChefRest chefRest = new ChefRest();
+                ChefRestGet chefRest = new ChefRestGet();
 
                 chefRest.FirstName = chef.FirstName;
                 chefRest.LastName = chef.LastName;
@@ -110,23 +110,30 @@ namespace Practice.WebApi.Controllers
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
         [HttpPost]
         [Route("home/chef/add-chef")]
-        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
+
+                ChefModel chef = new ChefModel();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber; 
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
                 chef = await chefService.PostAsync(chef);
 
-                ChefRest chefRest = new ChefRest();
-
-                chefRest.FirstName = chef.FirstName;
-                chefRest.LastName = chef.LastName;
-                chefRest.HireDate = chef.HireDate;
+                
+               
 
                 if (chef != null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chefRest);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
@@ -154,7 +161,7 @@ namespace Practice.WebApi.Controllers
             {
                 ChefService chefService = new ChefService();
 
-                ChefRest chefRest = new ChefRest();
+                ChefRestGet chefRest = new ChefRestGet();
 
                 chefRest.FirstName = chef.FirstName;
                 chefRest.LastName = chef.LastName;
@@ -198,9 +205,7 @@ namespace Practice.WebApi.Controllers
 
                 bool chef = await chefService.DeleteAsync(id);
 
-                ChefRest chefRest = new ChefRest();
-
-                
+                              
                 if (chef == true)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, id);
