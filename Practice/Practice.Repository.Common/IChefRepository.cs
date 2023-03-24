@@ -9,14 +9,14 @@ namespace Practice.Repository.Common
 {
     public interface IChefRepository
     {
-        List<ChefModel> GetAll();
+        Task<List<ChefModel>> GetAllAsync();
 
-        ChefModel Get(Guid id);
+        Task<ChefModel> GetAsync(Guid id);
 
-        bool Delete(Guid id);
+        Task<bool> DeleteAsync(Guid id);
 
-        ChefModel Post(ChefModel chef);
+        Task<ChefModel> PostAsync(ChefModel chef);
 
-        bool Put(Guid id, ChefModel chef);
+        Task<bool> PutAsync(Guid id, ChefModel chef);
     }
 }

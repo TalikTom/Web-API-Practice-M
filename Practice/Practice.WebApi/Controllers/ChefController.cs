@@ -19,6 +19,8 @@ using System.Reflection;
 using System.Xml.Linq;
 using Practice.Model;
 using Practice.Service;
+using System.Threading.Tasks;
+using Practice.WebApi.Models;
 
 namespace Practice.WebApi.Controllers
 {
@@ -31,23 +33,39 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public HttpResponseMessage GetAll()
+        public async Task<HttpResponseMessage> GetAllAsync()
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                List<ChefModel> chefs = chefService.GetAll();
+                List<ChefModel> chefs = await chefService.GetAllAsync();
 
-                chefs = chefService.GetAll();
+                List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
+
+                chefs = await chefService.GetAllAsync();
 
                 if (chefs == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, chefs);
+               
+
+                foreach (ChefModel chef in chefs)
+                {
+                    ChefRestGet chefRest = new ChefRestGet();
+                    chefRest.FirstName = chef.FirstName;
+                    chefRest.LastName = chef.LastName;
+                    chefRest.HireDate = chef.HireDate;
+                    mappedChefs.Add(chefRest);
+
+                }
+
+              
+
+                return Request.CreateResponse(HttpStatusCode.OK, mappedChefs);
 
             }
             catch (Exception e)
@@ -59,22 +77,27 @@ namespace Practice.WebApi.Controllers
         // GET home/waiter/5
         [HttpGet]
         [Route("home/chef/get-by-id/{id}")]
-        public HttpResponseMessage Get(Guid id)
+        public async Task<HttpResponseMessage> GetAsync(Guid id)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                ChefModel chef = chefService.Get(id);
+                ChefModel chef = await chefService.GetAsync(id);
 
+                ChefRestGet chefRest = new ChefRestGet();
+
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+                chefRest.HireDate = chef.HireDate;
 
                 if (chef == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, chef);
+                return Request.CreateResponse(HttpStatusCode.OK, chefRest);
 
             }
             catch (Exception e)
@@ -87,18 +110,30 @@ namespace Practice.WebApi.Controllers
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
         [HttpPost]
         [Route("home/chef/add-chef")]
-        public HttpResponseMessage Post([FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
-                chef = chefService.Post(chef);
 
+                ChefModel chef = new ChefModel();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber; 
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
+                chef = await chefService.PostAsync(chef);
+
+                
+               
 
                 if (chef != null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
@@ -113,11 +148,12 @@ namespace Practice.WebApi.Controllers
 
         }
 
+
         // PUT home/waiter/
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
         [HttpPut]
         [Route("home/chef/update-chef/{id}")]
-        public HttpResponseMessage Put(Guid id, [FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
         {
 
             try
@@ -125,7 +161,17 @@ namespace Practice.WebApi.Controllers
             {
                 ChefService chefService = new ChefService();
 
-                bool chefCheck = chefService.Put(id, chef);
+                ChefModel chef = new ChefModel();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
+
+                bool chefCheck = await chefService.PutAsync(id, chef);
 
                 if (!ModelState.IsValid)
                 {
@@ -136,7 +182,7 @@ namespace Practice.WebApi.Controllers
 
                 if (chefCheck == true)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chef);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
@@ -154,16 +200,16 @@ namespace Practice.WebApi.Controllers
 
         [HttpDelete]
         [Route("home/chef/delete-chef/{id}")]
-        public HttpResponseMessage Delete(Guid id)
+        public async Task<HttpResponseMessage> DeleteAsync(Guid id)
         {
 
             try
             {
                 ChefService chefService = new ChefService();
 
-                bool chef = chefService.Delete(id);
+                bool chef = await chefService.DeleteAsync(id);
 
-
+                              
                 if (chef == true)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, id);
