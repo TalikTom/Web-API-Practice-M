@@ -20,6 +20,7 @@ using System.Xml.Linq;
 using Practice.Model;
 using Practice.Service;
 using System.Threading.Tasks;
+using Practice.WebApi.Models;
 
 namespace Practice.WebApi.Controllers
 {
@@ -41,6 +42,8 @@ namespace Practice.WebApi.Controllers
 
                 List<ChefModel> chefs = await chefService.GetAllAsync();
 
+                List<ChefRest> mappedChefs = new List<ChefRest>();
+
                 chefs = await chefService.GetAllAsync();
 
                 if (chefs == null)
@@ -48,7 +51,20 @@ namespace Practice.WebApi.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, chefs);
+               
+
+                foreach (ChefModel chef in chefs)
+                {
+                    ChefRest chefRest = new ChefRest();
+                    chefRest.FirstName = chef.FirstName;
+                    chefRest.LastName = chef.LastName;
+                    mappedChefs.Add(chefRest);
+
+                }
+
+              
+
+                return Request.CreateResponse(HttpStatusCode.OK, mappedChefs);
 
             }
             catch (Exception e)
@@ -69,13 +85,18 @@ namespace Practice.WebApi.Controllers
 
                 ChefModel chef = await chefService.GetAsync(id);
 
+                ChefRest chefRest = new ChefRest();
+
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+
 
                 if (chef == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, chef);
+                return Request.CreateResponse(HttpStatusCode.OK, chefRest);
 
             }
             catch (Exception e)
