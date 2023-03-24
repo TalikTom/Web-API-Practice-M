@@ -153,7 +153,7 @@ namespace Practice.WebApi.Controllers
         // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
         [HttpPut]
         [Route("home/chef/update-chef/{id}")]
-        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefModel chef)
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
         {
 
             try
@@ -161,11 +161,15 @@ namespace Practice.WebApi.Controllers
             {
                 ChefService chefService = new ChefService();
 
-                ChefRestGet chefRest = new ChefRestGet();
+                ChefModel chef = new ChefModel();
 
-                chefRest.FirstName = chef.FirstName;
-                chefRest.LastName = chef.LastName;
-                chefRest.HireDate = chef.HireDate;
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
 
                 bool chefCheck = await chefService.PutAsync(id, chef);
 
@@ -178,7 +182,7 @@ namespace Practice.WebApi.Controllers
 
                 if (chefCheck == true)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, chefRest);
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
                 }
 
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
