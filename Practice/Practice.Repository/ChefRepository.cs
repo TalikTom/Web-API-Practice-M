@@ -20,7 +20,7 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public List<ChefModel> GetAll()
+        public async Task<List<ChefModel>> GetAllAsync()
         {
 
 
@@ -33,10 +33,10 @@ namespace Practice.Repository
 
                 connection.Open();
 
-                SqlDataReader reader = cm.ExecuteReader();
+                SqlDataReader reader = await cm.ExecuteReaderAsync();
                 if (reader.HasRows)
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
                         ChefModel chef = new ChefModel();
 
@@ -72,7 +72,7 @@ namespace Practice.Repository
 
         }
 
-        public ChefModel Get(Guid id)
+        public async Task<ChefModel> GetAsync(Guid id)
         {
 
 
@@ -85,13 +85,13 @@ namespace Practice.Repository
 
                 connection.Open();
 
-                SqlDataReader reader = cm.ExecuteReader();
+                SqlDataReader reader = await cm.ExecuteReaderAsync();
 
                 ChefModel chef = new ChefModel();
 
                 if (reader.HasRows)
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync())
                     {
                         chef.Id = (Guid)reader["Id"];
                         chef.FirstName = (string)reader["FirstName"];
@@ -121,7 +121,7 @@ namespace Practice.Repository
         }
 
 
-        public ChefModel Post(ChefModel chef)
+        public async Task<ChefModel> PostAsync(ChefModel chef)
         {
 
 
@@ -144,7 +144,7 @@ namespace Practice.Repository
 
                 connection.Open();
 
-                int rowsAffected = cm.ExecuteNonQuery();
+                int rowsAffected = await cm.ExecuteNonQueryAsync();
 
                 connection.Close();
 
@@ -160,7 +160,7 @@ namespace Practice.Repository
 
         }
 
-        public bool Put(Guid id, ChefModel chef)
+        public async Task<bool> PutAsync(Guid id, ChefModel chef)
         {
 
            using (SqlConnection connection = new SqlConnection(connectionString))
@@ -177,7 +177,7 @@ namespace Practice.Repository
                 cm.Parameters.AddWithValue("@HireDate", chef.HireDate);
 
                 connection.Open();
-                int rowsAffected = cm.ExecuteNonQuery();
+                int rowsAffected = await cm.ExecuteNonQueryAsync();
                 connection.Close();
 
 
@@ -192,7 +192,7 @@ namespace Practice.Repository
 
         }
 
-        public bool Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -205,7 +205,7 @@ namespace Practice.Repository
 
 
                 connection.Open();
-                int rowsAffected = cm.ExecuteNonQuery();
+                int rowsAffected = await cm.ExecuteNonQueryAsync();
                 connection.Close();
 
 

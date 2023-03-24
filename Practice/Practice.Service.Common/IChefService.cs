@@ -9,6 +9,14 @@ namespace Practice.Service.Common
 {
     public interface IChefService
     {
-        List<ChefModel> GetAll();
+        Task<List<ChefModel>> GetAllAsync();
+
+        Task<ChefModel> GetAsync(Guid id);
+
+        Task<bool> DeleteAsync(Guid id);
+
+        Task<ChefModel> PostAsync(ChefModel chef);
+
+        Task<bool> PutAsync(Guid id, ChefModel chef);
     }
 }
