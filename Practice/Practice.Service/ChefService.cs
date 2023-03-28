@@ -1,5 +1,6 @@
 ﻿using Practice.Model;
 using Practice.Repository;
+using Practice.Repository.Common;
 using Practice.Service.Common;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,17 @@ namespace Practice.Service
     public class ChefService : IChefService
     {
 
+        protected IChefRepository ChefRepository;
 
+        public ChefService(IChefRepository chefRepository)
+        {
+            ChefRepository = chefRepository;
+        }
 
         public async Task<List<ChefModel>> GetAllAsync()
         {
-            ChefRepository chefRepository = new ChefRepository();
-            List<ChefModel> chefs = await chefRepository.GetAllAsync();
+           
+            List<ChefModel> chefs = await ChefRepository.GetAllAsync();
 
             return chefs;
         }
@@ -25,8 +31,8 @@ namespace Practice.Service
 
         public async Task<ChefModel> GetAsync(Guid id)
         {
-            ChefRepository chefRepository = new ChefRepository();
-            ChefModel chef = await chefRepository.GetAsync(id);
+            
+            ChefModel chef = await ChefRepository.GetAsync(id);
 
             return chef;
         }
@@ -34,8 +40,8 @@ namespace Practice.Service
 
         public async Task<ChefModel> PostAsync(ChefModel chef)
         {
-            ChefRepository chefRepository = new ChefRepository();
-            chef = await chefRepository.PostAsync(chef);
+           
+            chef = await ChefRepository.PostAsync(chef);
 
             return chef;
         }
@@ -45,16 +51,16 @@ namespace Practice.Service
         {
           
 
-            ChefRepository chefRepository = new ChefRepository();
+            
 
-            ChefModel chefExist = await chefRepository.GetAsync(id);
+            ChefModel chefExist = await ChefRepository.GetAsync(id);
 
             if (chefExist == null)
             {
                 return false;
             }
 
-            bool chefCheck = await chefRepository.PutAsync(id, chef);
+            bool chefCheck = await ChefRepository.PutAsync(id, chef);
 
             return chefCheck;
         }
@@ -63,16 +69,16 @@ namespace Practice.Service
         public async Task<bool> DeleteAsync(Guid id)
         {
             
-            ChefRepository chefRepository = new ChefRepository();
+            
 
-            ChefModel chefExist = await chefRepository.GetAsync(id);
+            ChefModel chefExist = await ChefRepository.GetAsync(id);
 
             if (chefExist == null)
             {
                 return false;
             }
 
-            bool chef = await chefRepository.DeleteAsync(id);
+            bool chef = await ChefRepository.DeleteAsync(id);
 
             return chef;
         }
