@@ -28,7 +28,12 @@ namespace Practice.WebApi.Controllers
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
+        protected ChefService ChefService;
 
+        public ChefController(ChefService chefService)
+        {
+            ChefService = chefService;
+        }
 
         // GET home/chef/all
         [HttpGet]
@@ -38,13 +43,13 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                ChefService chefService = new ChefService();
+                
 
-                List<ChefModel> chefs = await chefService.GetAllAsync();
+                List<ChefModel> chefs = await ChefService.GetAllAsync();
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
-                chefs = await chefService.GetAllAsync();
+                chefs = await ChefService.GetAllAsync();
 
                 if (chefs == null)
                 {
@@ -82,9 +87,9 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                ChefService chefService = new ChefService();
+                
 
-                ChefModel chef = await chefService.GetAsync(id);
+                ChefModel chef = await ChefService.GetAsync(id);
 
                 ChefRestGet chefRest = new ChefRestGet();
 
@@ -115,7 +120,7 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                ChefService chefService = new ChefService();
+                
 
                 ChefModel chef = new ChefModel();
 
@@ -126,7 +131,7 @@ namespace Practice.WebApi.Controllers
                 chef.HomeAddress = chefRestPost.HomeAddress;
                 chef.OIB = chefRestPost.OIB;
 
-                chef = await chefService.PostAsync(chef);
+                chef = await ChefService.PostAsync(chef);
 
                 
                
@@ -159,7 +164,7 @@ namespace Practice.WebApi.Controllers
             try
 
             {
-                ChefService chefService = new ChefService();
+               
 
                 ChefModel chef = new ChefModel();
 
@@ -171,7 +176,7 @@ namespace Practice.WebApi.Controllers
                 chef.OIB = chefRestPost.OIB;
 
 
-                bool chefCheck = await chefService.PutAsync(id, chef);
+                bool chefCheck = await ChefService.PutAsync(id, chef);
 
                 if (!ModelState.IsValid)
                 {
@@ -205,9 +210,9 @@ namespace Practice.WebApi.Controllers
 
             try
             {
-                ChefService chefService = new ChefService();
+                
 
-                bool chef = await chefService.DeleteAsync(id);
+                bool chef = await ChefService.DeleteAsync(id);
 
                               
                 if (chef == true)
