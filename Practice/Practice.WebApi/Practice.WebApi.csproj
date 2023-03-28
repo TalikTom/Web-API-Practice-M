@@ -349,9 +349,17 @@
       <Project>{3b50ecb6-84f2-42f0-9315-730cafb30d61}</Project>
       <Name>Practice.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Practice.Repository.Common\Practice.Repository.Common.csproj">
+      <Project>{589F4D92-8465-4BD4-973F-29CB0FB58DEF}</Project>
+      <Name>Practice.Repository.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Practice.Repository\Practice.Repository.csproj">
       <Project>{9B57862F-839A-4A1C-9A53-EA1270805F4B}</Project>
       <Name>Practice.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Service.Common\Practice.Service.Common.csproj">
+      <Project>{53F5FF9B-B311-427F-B6AE-04DA5BEBC536}</Project>
+      <Name>Practice.Service.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Practice.Service\Practice.Service.csproj">
       <Project>{53fcc6ac-ea7b-490d-a231-0672c6e1bd7c}</Project>

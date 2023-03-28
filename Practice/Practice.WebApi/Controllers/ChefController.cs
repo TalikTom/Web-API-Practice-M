@@ -21,6 +21,7 @@ using Practice.Model;
 using Practice.Service;
 using System.Threading.Tasks;
 using Practice.WebApi.Models;
+using Practice.Service.Common;
 
 namespace Practice.WebApi.Controllers
 {
@@ -28,9 +29,9 @@ namespace Practice.WebApi.Controllers
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
-        protected ChefService ChefService;
+        protected IChefService ChefService;
 
-        public ChefController(ChefService chefService)
+        public ChefController(IChefService chefService)
         {
             ChefService = chefService;
         }
