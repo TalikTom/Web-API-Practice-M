@@ -32,7 +32,10 @@ namespace Practice.Repository
                 int offset = (paging.Page - 1) * paging.ItemsPerPage;
                 int fetchNext = paging.ItemsPerPage;
 
-                SqlCommand cm = new SqlCommand($"SELECT * FROM chef ORDER BY Id OFFSET {offset} ROWS FETCH NEXT {fetchNext} ROWS ONLY", connection);
+                SqlCommand cm = new SqlCommand("SELECT * FROM chef ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY", connection);
+
+                cm.Parameters.AddWithValue("@Offset", offset);
+                cm.Parameters.AddWithValue("@FetchNext", fetchNext);
 
                 List<ChefModel> chefs = new List<ChefModel>();
 
@@ -168,7 +171,7 @@ namespace Practice.Repository
         public async Task<bool> PutAsync(Guid id, ChefModel chef)
         {
 
-           using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
 
