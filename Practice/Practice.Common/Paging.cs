@@ -9,7 +9,7 @@ namespace Practice.Common
     public class Paging
     {
 
-        private int _maxItemsPerPage = 5;
+        private int _maxItemsPerPage = 10;
 
         private int _itemsPerPage = 3;
 
