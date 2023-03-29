@@ -8,5 +8,7 @@ namespace Practice.Common
 {
     public class Sorting
     {
+        public string SortBy { get; set; } = "";
+        public string SortOrder { get; set; } = "asc";
     }
 }

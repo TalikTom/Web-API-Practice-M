@@ -10,7 +10,7 @@ namespace Practice.Repository.Common
 {
     public interface IChefRepository
     {
-        Task<List<ChefModel>> GetAllAsync(Paging paging);
+        Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting);
 
         Task<ChefModel> GetAsync(Guid id);
 
