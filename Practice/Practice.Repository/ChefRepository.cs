@@ -12,6 +12,8 @@ using Practice.Model;
 using System.Configuration;
 using System.Runtime.Remoting.Messaging;
 using Practice.Common;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace Practice.Repository
 {
@@ -21,7 +23,7 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging)
+        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting)
         {
 
 
@@ -33,12 +35,22 @@ namespace Practice.Repository
 
                 SqlCommand cm = new SqlCommand();
 
+                if (sorting != null)
+                {
+                    queryBuilder.Append($" ORDER BY {sorting.SortBy} {sorting.SortOrder}");
+                }
+                else
+                {
+                    queryBuilder.Append(" ORDER BY Id");
+                }
+
+
                 if (paging != null)
                 {
                     int offset = (paging.Page - 1) * paging.ItemsPerPage;
                     int fetchNext = paging.ItemsPerPage;
 
-                    queryBuilder.Append(" ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY");
+                    queryBuilder.Append(" OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY");
 
                     cm.Parameters.AddWithValue("@Offset", (paging.Page - 1) * paging.ItemsPerPage);
                     cm.Parameters.AddWithValue("@FetchNext", paging.ItemsPerPage);

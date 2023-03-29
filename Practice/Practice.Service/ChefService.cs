@@ -23,10 +23,10 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging)
+        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting)
         {
            
-            List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging);
+            List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging, sorting);
 
           
             return chefs;
