@@ -22,6 +22,7 @@ using Practice.Service;
 using System.Threading.Tasks;
 using Practice.WebApi.Models;
 using Practice.Service.Common;
+using Practice.Common;
 
 namespace Practice.WebApi.Controllers
 {
@@ -39,18 +40,22 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public async Task<HttpResponseMessage> GetAllAsync()
+        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int maxItemsPerPage = 5)
         {
 
             try
             {
-                
+                Paging paging = new Paging
+                {
+                    Page = page,
+                    ItemsPerPage = maxItemsPerPage
+                };
 
-                List<ChefModel> chefs = await ChefService.GetAllAsync();
+                List<ChefModel> chefs = await ChefService.GetAllAsync(paging);
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
-                chefs = await ChefService.GetAllAsync();
+                
 
                 if (chefs == null)
                 {
@@ -68,8 +73,7 @@ namespace Practice.WebApi.Controllers
                     mappedChefs.Add(chefRest);
 
                 }
-
-              
+                              
 
                 return Request.CreateResponse(HttpStatusCode.OK, mappedChefs);
 

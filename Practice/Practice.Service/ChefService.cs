@@ -1,4 +1,5 @@
-﻿using Practice.Model;
+﻿using Practice.Common;
+using Practice.Model;
 using Practice.Repository;
 using Practice.Repository.Common;
 using Practice.Service.Common;
@@ -20,10 +21,10 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModel>> GetAllAsync()
+        public async Task<List<ChefModel>> GetAllAsync(Paging paging)
         {
            
-            List<ChefModel> chefs = await ChefRepository.GetAllAsync();
+            List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging);
 
             return chefs;
         }
