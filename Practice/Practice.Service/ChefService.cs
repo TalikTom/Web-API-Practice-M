@@ -16,6 +16,8 @@ namespace Practice.Service
 
         protected IChefRepository ChefRepository;
 
+        protected IWaiterService WaiterService;
+
         public ChefService(IChefRepository chefRepository)
         {
             ChefRepository = chefRepository;
@@ -26,6 +28,7 @@ namespace Practice.Service
            
             List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging);
 
+          
             return chefs;
         }
 

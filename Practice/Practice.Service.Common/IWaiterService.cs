@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Practice.Common;
+using Practice.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +10,6 @@ namespace Practice.Service.Common
 {
     public interface IWaiterService
     {
+        Task<List<WaiterModel>> GetAllAsync(Paging paging);
     }
 }

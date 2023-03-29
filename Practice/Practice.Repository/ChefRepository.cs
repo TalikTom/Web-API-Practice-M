@@ -29,13 +29,25 @@ namespace Practice.Repository
             {
 
 
-                int offset = (paging.Page - 1) * paging.ItemsPerPage;
-                int fetchNext = paging.ItemsPerPage;
+                StringBuilder queryBuilder = new StringBuilder("SELECT * FROM chef");
 
-                SqlCommand cm = new SqlCommand("SELECT * FROM chef ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY", connection);
+                SqlCommand cm = new SqlCommand();
 
-                cm.Parameters.AddWithValue("@Offset", offset);
-                cm.Parameters.AddWithValue("@FetchNext", fetchNext);
+                if (paging != null)
+                {
+                    int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                    int fetchNext = paging.ItemsPerPage;
+
+                    queryBuilder.Append(" ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY");
+
+                    cm.Parameters.AddWithValue("@Offset", (paging.Page - 1) * paging.ItemsPerPage);
+                    cm.Parameters.AddWithValue("@FetchNext", paging.ItemsPerPage);
+                }
+
+
+                cm.CommandText = queryBuilder.ToString();
+
+                cm.Connection = connection;
 
                 List<ChefModel> chefs = new List<ChefModel>();
 
