@@ -1,4 +1,5 @@
-﻿using Practice.Model;
+﻿using Practice.Common;
+using Practice.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Practice.Repository.Common
 {
     public interface IChefRepository
     {
-        Task<List<ChefModel>> GetAllAsync();
+        Task<List<ChefModel>> GetAllAsync(Paging paging);
 
         Task<ChefModel> GetAsync(Guid id);
 

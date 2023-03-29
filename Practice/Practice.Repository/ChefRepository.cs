@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Practice.Model;
 using System.Configuration;
 using System.Runtime.Remoting.Messaging;
+using Practice.Common;
 
 namespace Practice.Repository
 {
@@ -20,14 +21,21 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModel>> GetAllAsync()
+        public async Task<List<ChefModel>> GetAllAsync(Paging paging)
         {
 
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
-                SqlCommand cm = new SqlCommand("select * from chef", connection);
+
+                int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                int fetchNext = paging.ItemsPerPage;
+
+                SqlCommand cm = new SqlCommand("SELECT * FROM chef ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY", connection);
+
+                cm.Parameters.AddWithValue("@Offset", offset);
+                cm.Parameters.AddWithValue("@FetchNext", fetchNext);
 
                 List<ChefModel> chefs = new List<ChefModel>();
 
@@ -163,7 +171,7 @@ namespace Practice.Repository
         public async Task<bool> PutAsync(Guid id, ChefModel chef)
         {
 
-           using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
 
