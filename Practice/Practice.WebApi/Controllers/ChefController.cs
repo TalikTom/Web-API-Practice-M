@@ -40,7 +40,7 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "", string sortOrder = "asc")
+        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc")
         {
 
             try

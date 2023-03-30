@@ -39,11 +39,7 @@ namespace Practice.Repository
                 {
                     queryBuilder.Append($" ORDER BY {sorting.SortBy} {sorting.SortOrder}");
                 }
-                else
-                {
-                    queryBuilder.Append(" ORDER BY Id");
-                }
-
+                
 
                 if (paging != null)
                 {

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Practice.Common
 {
-    public class Sorting
+    public class ChefFilter
     {
-        public string SortBy { get; set; } = "Id";
-        public string SortOrder { get; set; } = "asc";
+        public Guid ChefId { get;}
     }
 }
