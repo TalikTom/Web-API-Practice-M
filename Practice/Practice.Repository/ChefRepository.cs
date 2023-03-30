@@ -23,7 +23,7 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting)
+        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
 
@@ -31,19 +31,34 @@ namespace Practice.Repository
             {
 
 
-                StringBuilder queryBuilder = new StringBuilder("SELECT * FROM chef");
+                StringBuilder queryBuilder = new StringBuilder("SELECT * FROM chef WHERE 1=1");
+
 
                 SqlCommand cm = new SqlCommand();
+
+                if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                {
+                    queryBuilder.Append(" AND FirstName LIKE @FirstName");
+                    cm.Parameters.AddWithValue("@FirstName", $"%{filteringChef.FirstName}%");
+                }
+
+                if (!string.IsNullOrEmpty(filteringChef.LastName))
+                {
+                    queryBuilder.Append(" AND LastName LIKE @LastName");
+                    cm.Parameters.AddWithValue("@LastName", $"%{filteringChef.LastName}%");
+                }
+
+                if (filteringChef.HireDate.HasValue)
+                {
+                    queryBuilder.Append(" AND HireDate = @HireDate");
+                    cm.Parameters.AddWithValue("@HireDate", filteringChef.HireDate.Value);
+                }
 
                 if (sorting != null)
                 {
                     queryBuilder.Append($" ORDER BY {sorting.SortBy} {sorting.SortOrder}");
                 }
-                else
-                {
-                    queryBuilder.Append(" ORDER BY Id");
-                }
-
+                
 
                 if (paging != null)
                 {

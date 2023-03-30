@@ -40,7 +40,7 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "", string sortOrder = "asc")
+        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
         {
 
             try
@@ -58,7 +58,15 @@ namespace Practice.WebApi.Controllers
                 };
 
 
-                List<ChefModel> chefs = await ChefService.GetAllAsync(paging, sorting);
+                ChefFilter filteringChef = new ChefFilter()
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    HireDate = hireDate
+                };
+
+
+                List<ChefModel> chefs = await ChefService.GetAllAsync(paging, sorting, filteringChef);
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
