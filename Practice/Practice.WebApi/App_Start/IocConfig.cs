@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using Practice.Dal;
 using Practice.Repository;
 using Practice.Repository.Common;
 using Practice.Service;
@@ -21,8 +22,7 @@ namespace Practice.WebApi.App_Start
         {
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            //builder.RegisterType<ChefService>().AsSelf().InstancePerRequest();
-            //builder.RegisterType<ChefRepository>().AsSelf().InstancePerRequest();
+            builder.RegisterType<RestaurantContext>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ChefService>().As<IChefService>().InstancePerRequest();
             builder.RegisterType<EFChefRepository>().As<IChefRepository>().InstancePerRequest();
             var container = builder.Build();

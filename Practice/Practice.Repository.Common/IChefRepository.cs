@@ -12,12 +12,12 @@ namespace Practice.Repository.Common
     {
         Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
 
-        Task<ChefModel> GetAsync(Guid id);
+        //Task<ChefModel> GetAsync(Guid id);
 
-        Task<bool> DeleteAsync(Guid id);
+        //Task<bool> DeleteAsync(Guid id);
 
-        Task<ChefModel> PostAsync(ChefModel chef);
+        //Task<ChefModel> PostAsync(ChefModel chef);
 
-        Task<bool> PutAsync(Guid id, ChefModel chef);
+        //Task<bool> PutAsync(Guid id, ChefModel chef);
     }
 }

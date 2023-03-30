@@ -33,58 +33,58 @@ namespace Practice.Service
         }
 
 
-        public async Task<ChefModel> GetAsync(Guid id)
-        {
+        //public async Task<ChefModel> GetAsync(Guid id)
+        //{
             
-            ChefModel chef = await ChefRepository.GetAsync(id);
+        //    ChefModel chef = await ChefRepository.GetAsync(id);
 
-            return chef;
-        }
+        //    return chef;
+        //}
 
 
-        public async Task<ChefModel> PostAsync(ChefModel chef)
-        {
+        //public async Task<ChefModel> PostAsync(ChefModel chef)
+        //{
            
-            chef = await ChefRepository.PostAsync(chef);
+        //    chef = await ChefRepository.PostAsync(chef);
 
-            return chef;
-        }
+        //    return chef;
+        //}
 
 
-        public async Task<bool> PutAsync(Guid id, ChefModel chef)
-        {
+        //public async Task<bool> PutAsync(Guid id, ChefModel chef)
+        //{
           
 
             
 
-            ChefModel chefExist = await ChefRepository.GetAsync(id);
+        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
 
-            if (chefExist == null)
-            {
-                return false;
-            }
+        //    if (chefExist == null)
+        //    {
+        //        return false;
+        //    }
 
-            bool chefCheck = await ChefRepository.PutAsync(id, chef);
+        //    bool chefCheck = await ChefRepository.PutAsync(id, chef);
 
-            return chefCheck;
-        }
+        //    return chefCheck;
+        //}
 
 
-        public async Task<bool> DeleteAsync(Guid id)
-        {
+        //public async Task<bool> DeleteAsync(Guid id)
+        //{
             
             
 
-            ChefModel chefExist = await ChefRepository.GetAsync(id);
+        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
 
-            if (chefExist == null)
-            {
-                return false;
-            }
+        //    if (chefExist == null)
+        //    {
+        //        return false;
+        //    }
 
-            bool chef = await ChefRepository.DeleteAsync(id);
+        //    bool chef = await ChefRepository.DeleteAsync(id);
 
-            return chef;
-        }
+        //    return chef;
+        //}
     }
 }
