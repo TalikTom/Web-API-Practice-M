@@ -8,6 +8,11 @@ namespace Practice.Common
 {
     public class ChefFilter
     {
-        public Guid ChefId { get;}
+        
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public DateTime? HireDate { get; set; }
+
+
     }
 }
