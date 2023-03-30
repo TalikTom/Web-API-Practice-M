@@ -24,7 +24,7 @@ namespace Practice.WebApi.App_Start
             //builder.RegisterType<ChefService>().AsSelf().InstancePerRequest();
             //builder.RegisterType<ChefRepository>().AsSelf().InstancePerRequest();
             builder.RegisterType<ChefService>().As<IChefService>().InstancePerRequest();
-            builder.RegisterType<ChefRepository>().As<IChefRepository>().InstancePerRequest();
+            builder.RegisterType<EFChefRepository>().As<IChefRepository>().InstancePerRequest();
             var container = builder.Build();
             var resolver = new AutofacWebApiDependencyResolver(container);
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
