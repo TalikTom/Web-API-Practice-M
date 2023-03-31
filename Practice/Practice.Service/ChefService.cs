@@ -28,7 +28,6 @@ namespace Practice.Service
            
             List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
 
-          
             return chefs;
         }
 
@@ -42,16 +41,16 @@ namespace Practice.Service
         }
 
 
-        //public async Task<ChefModel> PostAsync(ChefModel chef)
-        //{
+        public async Task<ChefModelDTO> PostAsync(ChefModelDTO chef)
+        {
 
-        //    chef = await ChefRepository.PostAsync(chef);
+            chef = await ChefRepository.PostAsync(chef);
 
-        //    return chef;
-        //}
+            return chef;
+        }
 
 
-        //public async Task<bool> PutAsync(Guid id, ChefModel chef)
+        //public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
         //{
 
 

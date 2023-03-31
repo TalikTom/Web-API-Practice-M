@@ -24,6 +24,7 @@ namespace Practice.Repository
             DbContext = dbContext;
         }
 
+
         public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
@@ -95,8 +96,6 @@ namespace Practice.Repository
 
 
 
-
-
             var chefs = await query.ToListAsync();
 
             if (chefs.Count == 0)
@@ -118,6 +117,7 @@ namespace Practice.Repository
 
             return chefModels;
         }
+
 
         public async Task<ChefModelDTO> GetByIdAsync(Guid id)
         {
@@ -149,9 +149,6 @@ namespace Practice.Repository
 
             //return chef;
 
-
-
-
         }
 
 
@@ -173,10 +170,39 @@ namespace Practice.Repository
 
 
 
-        //public Task<ChefModel> PostAsync(ChefModel chef)
-        //{
+        public async Task<ChefModelDTO> PostAsync(ChefModelDTO chef)
+        {
+            Chef newChef = new Chef
+            {
+                Id = Guid.NewGuid(),
+                FirstName = chef.FirstName,
+                LastName = chef.LastName,
+                PhoneNumber = chef.PhoneNumber,
+                HomeAddress = chef.HomeAddress,
+                Certified = chef.Certified,
+                OIB = chef.OIB,
+                HireDate = chef.HireDate
+            };
 
-        //}
+
+            DbContext.Chef.Add(newChef);
+
+
+            int rowsAffected = await DbContext.SaveChangesAsync();
+
+
+            if (rowsAffected > 0)
+            {
+                chef.Id = newChef.Id;
+                return chef;
+            }
+
+            return null;
+        }
+
+
+
+
 
         //public Task<bool> PutAsync(Guid id, ChefModel chef)
         //{

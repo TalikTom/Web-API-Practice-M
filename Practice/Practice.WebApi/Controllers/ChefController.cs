@@ -131,47 +131,47 @@ namespace Practice.WebApi.Controllers
             }
         }
 
-        ////POST home/chef
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
-        //[HttpPost]
-        //[Route("home/chef/add-chef")]
-        //public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
-        //{
+        //POST home/chef
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
+        [HttpPost]
+        [Route("home/chef/add-chef")]
+        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
+        {
 
-        //    try
-        //    {
-
-
-        //        ChefModel chef = new ChefModel();
-
-        //        chef.FirstName = chefRestPost.FirstName;
-        //        chef.LastName = chefRestPost.LastName;
-        //        chef.HireDate = chefRestPost.HireDate;
-        //        chef.PhoneNumber = chefRestPost.PhoneNumber; 
-        //        chef.HomeAddress = chefRestPost.HomeAddress;
-        //        chef.OIB = chefRestPost.OIB;
-
-        //        chef = await ChefService.PostAsync(chef);
+            try
+            {
 
 
+                ChefModelDTO chef = new ChefModelDTO();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
+                chef = await ChefService.PostAsync(chef);
 
 
-        //        if (chef != null)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-
-        //    }
-
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
 
 
-        //}
+                if (chef != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+
+            }
+
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+
+        }
 
 
         //// PUT home/waiter/
