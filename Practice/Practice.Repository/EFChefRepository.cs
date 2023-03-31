@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -139,7 +140,7 @@ namespace Practice.Repository
 
             return query;
 
-
+            ////Read raw sql from .txt file
 
             //string file = @"C:\Users\student\Documents\Luka\rawsql.txt";
 
@@ -200,6 +201,29 @@ namespace Practice.Repository
             return null;
         }
 
+        public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
+        {
+            var query = DbContext.Chef.AsQueryable();
+
+            var existingChef = await query.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (existingChef != null)
+            {
+                
+                existingChef.FirstName = chef.FirstName;
+                existingChef.LastName = chef.LastName;
+                existingChef.PhoneNumber = chef.PhoneNumber;
+                existingChef.HomeAddress = chef.HomeAddress;
+                existingChef.Certified = chef.Certified;
+                existingChef.OIB = chef.OIB;
+                existingChef.HireDate = chef.HireDate;
+
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
 
         public async Task<int> PostRandomChefsAsync(int count)
         {
@@ -213,12 +237,6 @@ namespace Practice.Repository
             return count;
         }
 
-
-
-
-        //public Task<bool> PutAsync(Guid id, ChefModel chef)
-        //{
-
-        //}
+              
     }
 }

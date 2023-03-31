@@ -20,6 +20,6 @@ namespace Practice.Repository.Common
 
         Task<int> PostRandomChefsAsync(int count);
 
-        //Task<bool> PutAsync(Guid id, ChefModel chef);
+        Task<bool> PutAsync(Guid id, ChefModelDTO chef);
     }
 }

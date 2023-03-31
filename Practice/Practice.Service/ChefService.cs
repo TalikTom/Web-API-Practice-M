@@ -58,23 +58,23 @@ namespace Practice.Service
         }
 
 
-        //public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
-        //{
+        public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
+        {
 
 
 
 
-        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
+            ChefModelDTO chefExist = await ChefRepository.GetByIdAsync(id);
 
-        //    if (chefExist == null)
-        //    {
-        //        return false;
-        //    }
+            if (chefExist == null)
+            {
+                return false;
+            }
 
-        //    bool chefCheck = await ChefRepository.PutAsync(id, chef);
+            bool chefCheck = await ChefRepository.PutAsync(id, chef);
 
-        //    return chefCheck;
-        //}
+            return chefCheck;
+        }
 
 
         public async Task<bool> DeleteAsync(Guid id)

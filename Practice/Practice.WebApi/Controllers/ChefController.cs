@@ -192,51 +192,50 @@ namespace Practice.WebApi.Controllers
 
 
 
-        //// PUT home/waiter/
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
-        //[HttpPut]
-        //[Route("home/chef/update-chef/{id}")]
-        //public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
-        //{
+        // PUT home/waiter/
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
+        [HttpPut]
+        [Route("home/chef/update-chef/{id}")]
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
+        {
 
-        //    try
+            try
 
-        //    {
+            {
+
+                ChefModelDTO chef = new ChefModelDTO();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
 
 
-        //        ChefModel chef = new ChefModel();
+                bool chefCheck = await ChefService.PutAsync(id, chef);
 
-        //        chef.FirstName = chefRestPost.FirstName;
-        //        chef.LastName = chefRestPost.LastName;
-        //        chef.HireDate = chefRestPost.HireDate;
-        //        chef.PhoneNumber = chefRestPost.PhoneNumber;
-        //        chef.HomeAddress = chefRestPost.HomeAddress;
-        //        chef.OIB = chefRestPost.OIB;
+                if (!ModelState.IsValid)
+                {
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
 
+                }
 
-        //        bool chefCheck = await ChefService.PutAsync(id, chef);
+                if (chefCheck == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
+                }
 
-        //        if (!ModelState.IsValid)
-        //        {
-        //            App_Start.Logger.createTxtFSSW("Model state is not valid");
-        //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
 
-        //        }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
 
-        //        if (chefCheck == true)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
-
-        //}
+        }
 
 
         //DELETE home/delete-chef/{id}
@@ -261,12 +260,11 @@ namespace Practice.WebApi.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
             }
 
+
             catch (Exception e)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
             }
-
-
 
 
         }
