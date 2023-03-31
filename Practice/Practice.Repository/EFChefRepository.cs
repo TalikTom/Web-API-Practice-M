@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -24,26 +25,73 @@ namespace Practice.Repository
 
         public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
+
             var query = DbContext.Chef.AsQueryable();
 
-            if (!string.IsNullOrEmpty(filteringChef.FirstName))
+
+            if (filteringChef != null)
             {
-                query = query.Where(chef => chef.FirstName.Contains(filteringChef.FirstName));
+
+                if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                {
+                    query = query.Where(chef => chef.FirstName.Contains(filteringChef.FirstName));
+                }
+
+                if (!string.IsNullOrEmpty(filteringChef.LastName))
+                {
+                    query = query.Where(chef => chef.LastName.Contains(filteringChef.LastName));
+                }
+
+                if (filteringChef.HireDate.HasValue)
+                {
+                    query = query.Where(chef => chef.HireDate == filteringChef.HireDate.Value);
+                }
+
             }
 
-            if (!string.IsNullOrEmpty(filteringChef.LastName))
+
+            if (paging != null)
             {
-                query = query.Where(chef => chef.LastName.Contains(filteringChef.LastName));
+                int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                int fetchNext = paging.ItemsPerPage;
+
+                query = query.OrderBy(x => x.Id).Skip(offset).Take(fetchNext);
             }
 
-            if (filteringChef.HireDate.HasValue)
+
+            if (sorting != null)
             {
-                query = query.Where(chef => chef.HireDate == filteringChef.HireDate.Value);
+                string sortBy = sorting.SortBy;
+                string sortOrder = sorting.SortOrder;
+
+                switch (sortBy.ToLower())
+                {
+                    case "firstname":
+                        query = sortOrder.ToLower() == "desc"
+                            ? query.OrderByDescending(chef => chef.FirstName)
+                            : query.OrderBy(chef => chef.FirstName);
+                        break;
+                    case "lastname":
+                        query = sortOrder.ToLower() == "desc"
+                            ? query.OrderByDescending(chef => chef.LastName)
+                            : query.OrderBy(chef => chef.LastName);
+                        break;
+                    case "hiredate":
+                        query = sortOrder.ToLower() == "desc"
+                            ? query.OrderByDescending(chef => chef.HireDate)
+                            : query.OrderBy(chef => chef.HireDate);
+                        break;
+                    default:
+                        
+                        query = sortOrder.ToLower() == "desc"
+                            ? query.OrderByDescending(chef => chef.Id)
+                            : query.OrderBy(chef => chef.Id);
+                        break;
+                }
             }
 
-            //paging
-           
-            //sorting
+
+
 
 
             var chefs = await query.ToListAsync();
