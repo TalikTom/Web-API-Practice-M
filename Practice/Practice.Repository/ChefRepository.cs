@@ -23,7 +23,7 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
 
@@ -76,7 +76,7 @@ namespace Practice.Repository
 
                 cm.Connection = connection;
 
-                List<ChefModel> chefs = new List<ChefModel>();
+                List<ChefModelDTO> chefs = new List<ChefModelDTO>();
 
                 connection.Open();
 
@@ -85,7 +85,7 @@ namespace Practice.Repository
                 {
                     while (await reader.ReadAsync())
                     {
-                        ChefModel chef = new ChefModel();
+                        ChefModelDTO chef = new ChefModelDTO();
 
                         chef.Id = (Guid)reader["Id"];
                         chef.FirstName = (string)reader["FirstName"];
@@ -119,7 +119,7 @@ namespace Practice.Repository
 
         }
 
-        public async Task<ChefModel> GetAsync(Guid id)
+        public async Task<ChefModelDTO> GetByIdAsync(Guid id)
         {
 
 
@@ -134,7 +134,7 @@ namespace Practice.Repository
 
                 SqlDataReader reader = await cm.ExecuteReaderAsync();
 
-                ChefModel chef = new ChefModel();
+                ChefModelDTO chef = new ChefModelDTO();
 
                 if (reader.HasRows)
                 {
@@ -168,7 +168,7 @@ namespace Practice.Repository
         }
 
 
-        public async Task<ChefModel> PostAsync(ChefModel chef)
+        public async Task<ChefModelDTO> PostAsync(ChefModelDTO chef)
         {
 
 
@@ -207,7 +207,7 @@ namespace Practice.Repository
 
         }
 
-        public async Task<bool> PutAsync(Guid id, ChefModel chef)
+        public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
         {
 
             using (SqlConnection connection = new SqlConnection(connectionString))

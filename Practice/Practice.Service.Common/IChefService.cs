@@ -10,9 +10,9 @@ namespace Practice.Service.Common
 {
     public interface IChefService
     {
-        Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
+        Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
 
-        //Task<ChefModel> GetAsync(Guid id);
+        //Task<ChefModel> GetByIdAsync(Guid id);
 
         //Task<bool> DeleteAsync(Guid id);
 

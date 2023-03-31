@@ -23,20 +23,20 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
            
-            List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging, sorting, filteringChef);
+            List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
 
           
             return chefs;
         }
 
 
-        //public async Task<ChefModel> GetAsync(Guid id)
+        //public async Task<ChefModel> GetByIdAsync(Guid id)
         //{
-            
-        //    ChefModel chef = await ChefRepository.GetAsync(id);
+
+        //    ChefModel chef = await ChefRepository.GetByIdAsync(id);
 
         //    return chef;
         //}
@@ -44,7 +44,7 @@ namespace Practice.Service
 
         //public async Task<ChefModel> PostAsync(ChefModel chef)
         //{
-           
+
         //    chef = await ChefRepository.PostAsync(chef);
 
         //    return chef;
@@ -53,9 +53,9 @@ namespace Practice.Service
 
         //public async Task<bool> PutAsync(Guid id, ChefModel chef)
         //{
-          
 
-            
+
+
 
         //    ChefModel chefExist = await ChefRepository.GetAsync(id);
 
@@ -70,19 +70,19 @@ namespace Practice.Service
         //}
 
 
-        //public async Task<bool> DeleteAsync(Guid id)
+        //public async task<bool> deleteasync(guid id)
         //{
-            
-            
 
-        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
 
-        //    if (chefExist == null)
+
+        //    chefmodel chefexist = await chefrepository.getasync(id);
+
+        //    if (chefexist == null)
         //    {
         //        return false;
         //    }
 
-        //    bool chef = await ChefRepository.DeleteAsync(id);
+        //    bool chef = await chefrepository.deleteasync(id);
 
         //    return chef;
         //}

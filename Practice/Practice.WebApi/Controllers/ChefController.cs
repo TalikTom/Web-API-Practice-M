@@ -40,7 +40,7 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
+        public async Task<HttpResponseMessage> FindAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
         {
 
             try
@@ -66,7 +66,7 @@ namespace Practice.WebApi.Controllers
                 };
 
 
-                List<ChefModel> chefs = await ChefService.GetAllAsync(paging, sorting, filteringChef);
+                List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
@@ -79,7 +79,7 @@ namespace Practice.WebApi.Controllers
 
                
 
-                foreach (ChefModel chef in chefs)
+                foreach (ChefModelDTO chef in chefs)
                 {
                     ChefRestGet chefRest = new ChefRestGet();
                     chefRest.FirstName = chef.FirstName;
@@ -102,14 +102,14 @@ namespace Practice.WebApi.Controllers
         //// GET home/waiter/5
         //[HttpGet]
         //[Route("home/chef/get-by-id/{id}")]
-        //public async Task<HttpResponseMessage> GetAsync(Guid id)
+        //public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
         //{
 
         //    try
         //    {
-                
 
-        //        ChefModel chef = await ChefService.GetAsync(id);
+
+        //        ChefModel chef = await ChefService.GetByIdAsync(id);
 
         //        ChefRestGet chefRest = new ChefRestGet();
 
@@ -140,7 +140,7 @@ namespace Practice.WebApi.Controllers
 
         //    try
         //    {
-                
+
 
         //        ChefModel chef = new ChefModel();
 
@@ -153,8 +153,8 @@ namespace Practice.WebApi.Controllers
 
         //        chef = await ChefService.PostAsync(chef);
 
-                
-               
+
+
 
         //        if (chef != null)
         //        {
@@ -184,7 +184,7 @@ namespace Practice.WebApi.Controllers
         //    try
 
         //    {
-               
+
 
         //        ChefModel chef = new ChefModel();
 
@@ -230,11 +230,11 @@ namespace Practice.WebApi.Controllers
 
         //    try
         //    {
-                
+
 
         //        bool chef = await ChefService.DeleteAsync(id);
 
-                              
+
         //        if (chef == true)
         //        {
         //            return Request.CreateResponse(HttpStatusCode.OK, id);

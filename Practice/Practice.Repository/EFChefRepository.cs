@@ -23,7 +23,7 @@ namespace Practice.Repository
             DbContext = dbContext;
         }
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
             var query = DbContext.Chef.AsQueryable();
@@ -34,12 +34,14 @@ namespace Practice.Repository
 
                 if (!string.IsNullOrEmpty(filteringChef.FirstName))
                 {
-                    query = query.Where(chef => chef.FirstName.Contains(filteringChef.FirstName));
+                    query = query.Where(chef => chef.FirstName.ToLower().Contains(filteringChef.FirstName.ToLower()));
+
                 }
 
                 if (!string.IsNullOrEmpty(filteringChef.LastName))
                 {
-                    query = query.Where(chef => chef.LastName.Contains(filteringChef.LastName));
+                    query = query.Where(chef => chef.LastName.ToLower().Contains(filteringChef.LastName.ToLower()));
+
                 }
 
                 if (filteringChef.HireDate.HasValue)
@@ -101,7 +103,7 @@ namespace Practice.Repository
                 return null;
             }
 
-            var chefModels = chefs.Select(chef => new ChefModel
+            var chefModels = chefs.Select(chef => new ChefModelDTO
             {
                 Id = chef.Id,
                 FirstName = chef.FirstName,
@@ -122,8 +124,7 @@ namespace Practice.Repository
         //}
 
 
-
-        //public Task<ChefModel> GetAsync(Guid id)
+        //public Task<ChefModel> GetByIdAsync(Guid id)
         //{
 
         //}
