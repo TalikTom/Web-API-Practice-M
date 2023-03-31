@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChefFilter.cs" />
+    <Compile Include="GenerateRandom.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Paging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +89,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Practice.Model\Practice.Model.csproj">
+      <Project>{3b50ecb6-84f2-42f0-9315-730cafb30d61}</Project>
+      <Name>Practice.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

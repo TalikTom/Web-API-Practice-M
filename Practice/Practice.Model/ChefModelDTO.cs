@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Practice.Model
 {
-    public class ChefModel : IChefModel
+    public class ChefModelDTO : IChefModel
     {
 
         public Guid Id { get; set; }

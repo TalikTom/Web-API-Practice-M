@@ -40,7 +40,7 @@ namespace Practice.WebApi.Controllers
         // GET home/chef/all
         [HttpGet]
         [Route("home/chef/get-all/")]
-        public async Task<HttpResponseMessage> GetAllAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
+        public async Task<HttpResponseMessage> FindAsync(int page = 1, int itemsPerPage = 5, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
         {
 
             try
@@ -66,20 +66,20 @@ namespace Practice.WebApi.Controllers
                 };
 
 
-                List<ChefModel> chefs = await ChefService.GetAllAsync(paging, sorting, filteringChef);
+                List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
-                
+
 
                 if (chefs == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-               
 
-                foreach (ChefModel chef in chefs)
+
+                foreach (ChefModelDTO chef in chefs)
                 {
                     ChefRestGet chefRest = new ChefRestGet();
                     chefRest.FirstName = chef.FirstName;
@@ -88,7 +88,7 @@ namespace Practice.WebApi.Controllers
                     mappedChefs.Add(chefRest);
 
                 }
-                              
+
 
                 return Request.CreateResponse(HttpStatusCode.OK, mappedChefs);
 
@@ -99,157 +99,175 @@ namespace Practice.WebApi.Controllers
             }
         }
 
-        //// GET home/waiter/5
-        //[HttpGet]
-        //[Route("home/chef/get-by-id/{id}")]
-        //public async Task<HttpResponseMessage> GetAsync(Guid id)
-        //{
+        // GET home/waiter/5
+        [HttpGet]
+        [Route("home/chef/get-by-id/{id}")]
+        public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
+        {
 
-        //    try
-        //    {
-                
-
-        //        ChefModel chef = await ChefService.GetAsync(id);
-
-        //        ChefRestGet chefRest = new ChefRestGet();
-
-        //        chefRest.FirstName = chef.FirstName;
-        //        chefRest.LastName = chef.LastName;
-        //        chefRest.HireDate = chef.HireDate;
-
-        //        if (chef == null)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.NotFound);
-        //        }
-
-        //        return Request.CreateResponse(HttpStatusCode.OK, chefRest);
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
-        //}
-
-        ////POST home/chef
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
-        //[HttpPost]
-        //[Route("home/chef/add-chef")]
-        //public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
-        //{
-
-        //    try
-        //    {
-                
-
-        //        ChefModel chef = new ChefModel();
-
-        //        chef.FirstName = chefRestPost.FirstName;
-        //        chef.LastName = chefRestPost.LastName;
-        //        chef.HireDate = chefRestPost.HireDate;
-        //        chef.PhoneNumber = chefRestPost.PhoneNumber; 
-        //        chef.HomeAddress = chefRestPost.HomeAddress;
-        //        chef.OIB = chefRestPost.OIB;
-
-        //        chef = await ChefService.PostAsync(chef);
-
-                
-               
-
-        //        if (chef != null)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-
-        //    }
-
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
+            try
+            {
 
 
-        //}
+                ChefModelDTO chef = await ChefService.GetByIdAsync(id);
+
+                ChefRestGet chefRest = new ChefRestGet();
+
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+                chefRest.HireDate = chef.HireDate;
+
+                if (chef == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, chefRest);
+
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+        }
+
+        //POST home/chef
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z
+        [HttpPost]
+        [Route("home/chef/add-chef")]
+        public async Task<HttpResponseMessage> PostAsync([FromBody] ChefRestPost chefRestPost)
+        {
+
+            try
+            {
 
 
-        //// PUT home/waiter/
-        //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
-        //[HttpPut]
-        //[Route("home/chef/update-chef/{id}")]
-        //public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
-        //{
+                ChefModelDTO chef = new ChefModelDTO();
 
-        //    try
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
 
-        //    {
-               
-
-        //        ChefModel chef = new ChefModel();
-
-        //        chef.FirstName = chefRestPost.FirstName;
-        //        chef.LastName = chefRestPost.LastName;
-        //        chef.HireDate = chefRestPost.HireDate;
-        //        chef.PhoneNumber = chefRestPost.PhoneNumber;
-        //        chef.HomeAddress = chefRestPost.HomeAddress;
-        //        chef.OIB = chefRestPost.OIB;
+                chef = await ChefService.PostAsync(chef);
 
 
-        //        bool chefCheck = await ChefService.PutAsync(id, chef);
-
-        //        if (!ModelState.IsValid)
-        //        {
-        //            App_Start.Logger.createTxtFSSW("Model state is not valid");
-        //            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-
-        //        }
-
-        //        if (chefCheck == true)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
-
-        //}
 
 
-        ////DELETE home/delete-chef/{id}
+                if (chef != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
+                }
 
-        //[HttpDelete]
-        //[Route("home/chef/delete-chef/{id}")]
-        //public async Task<HttpResponseMessage> DeleteAsync(Guid id)
-        //{
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
 
-        //    try
-        //    {
-                
+            }
 
-        //        bool chef = await ChefService.DeleteAsync(id);
-
-                              
-        //        if (chef == true)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, id);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-        //    }
-
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
 
 
-        //}
+        }
 
+        //POST home/chef/add-chef-random/{count}
+        [HttpPost]
+        [Route("home/chef/add-chef-random/{count}")]
+        public async Task<HttpResponseMessage> PostRandomChefsAsync([FromUri] int count)
+        {
+            try
+            {
+                await ChefService.PostRandomChefsAsync(count);
+                return Request.CreateResponse(HttpStatusCode.Created, $"Successfully inserted {count} random chefs.");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+        }
+
+
+
+
+        // PUT home/waiter/
+        // https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
+        [HttpPut]
+        [Route("home/chef/update-chef/{id}")]
+        public async Task<HttpResponseMessage> PutAsync(Guid id, [FromBody] ChefRestPost chefRestPost)
+        {
+
+            try
+
+            {
+
+                ChefModelDTO chef = new ChefModelDTO();
+
+                chef.FirstName = chefRestPost.FirstName;
+                chef.LastName = chefRestPost.LastName;
+                chef.HireDate = chefRestPost.HireDate;
+                chef.PhoneNumber = chefRestPost.PhoneNumber;
+                chef.HomeAddress = chefRestPost.HomeAddress;
+                chef.OIB = chefRestPost.OIB;
+
+
+                bool chefCheck = await ChefService.PutAsync(id, chef);
+
+                if (!ModelState.IsValid)
+                {
+                    App_Start.Logger.createTxtFSSW("Model state is not valid");
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+
+                }
+
+                if (chefCheck == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, chefRestPost);
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+        }
+
+
+        //DELETE home/delete-chef/{id}
+
+        [HttpDelete]
+        [Route("home/chef/delete-chef/{id}")]
+        public async Task<HttpResponseMessage> DeleteAsync(Guid id)
+        {
+
+            try
+            {
+
+
+                bool chef = await ChefService.DeleteAsync(id);
+
+
+                if (chef == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, id);
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+            }
+
+
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+
+        }
     }
+
 }

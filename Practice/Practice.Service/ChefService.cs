@@ -23,68 +23,75 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModel>> GetAllAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
            
-            List<ChefModel> chefs = await ChefRepository.GetAllAsync(paging, sorting, filteringChef);
+            List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
 
-          
             return chefs;
         }
 
 
-        //public async Task<ChefModel> GetAsync(Guid id)
-        //{
-            
-        //    ChefModel chef = await ChefRepository.GetAsync(id);
+        public async Task<ChefModelDTO> GetByIdAsync(Guid id)
+        {
 
-        //    return chef;
-        //}
+            ChefModelDTO chef = await ChefRepository.GetByIdAsync(id);
 
-
-        //public async Task<ChefModel> PostAsync(ChefModel chef)
-        //{
-           
-        //    chef = await ChefRepository.PostAsync(chef);
-
-        //    return chef;
-        //}
+            return chef;
+        }
 
 
-        //public async Task<bool> PutAsync(Guid id, ChefModel chef)
-        //{
-          
+        public async Task<ChefModelDTO> PostAsync(ChefModelDTO chef)
+        {
 
-            
+            chef = await ChefRepository.PostAsync(chef);
 
-        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
+            return chef;
+        }
 
-        //    if (chefExist == null)
-        //    {
-        //        return false;
-        //    }
+        public async Task<int> PostRandomChefsAsync(int count)
+        {
 
-        //    bool chefCheck = await ChefRepository.PutAsync(id, chef);
+            count = await ChefRepository.PostRandomChefsAsync(count);
 
-        //    return chefCheck;
-        //}
+            return count;
+        }
 
 
-        //public async Task<bool> DeleteAsync(Guid id)
-        //{
-            
-            
+        public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
+        {
 
-        //    ChefModel chefExist = await ChefRepository.GetAsync(id);
 
-        //    if (chefExist == null)
-        //    {
-        //        return false;
-        //    }
 
-        //    bool chef = await ChefRepository.DeleteAsync(id);
 
-        //    return chef;
-        //}
+            ChefModelDTO chefExist = await ChefRepository.GetByIdAsync(id);
+
+            if (chefExist == null)
+            {
+                return false;
+            }
+
+            bool chefCheck = await ChefRepository.PutAsync(id, chef);
+
+            return chefCheck;
+        }
+
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+
+
+
+            ChefModelDTO chefExist = await ChefRepository.GetByIdAsync(id);
+
+            if (chefExist == null)
+            {
+                return false;
+            }
+
+            bool chef = await ChefRepository.DeleteAsync(id);
+
+            return chef;
+        }
     }
 }
