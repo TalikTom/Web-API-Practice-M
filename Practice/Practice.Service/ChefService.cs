@@ -33,13 +33,13 @@ namespace Practice.Service
         }
 
 
-        //public async Task<ChefModel> GetByIdAsync(Guid id)
-        //{
+        public async Task<ChefModelDTO> GetByIdAsync(Guid id)
+        {
 
-        //    ChefModel chef = await ChefRepository.GetByIdAsync(id);
+            ChefModelDTO chef = await ChefRepository.GetByIdAsync(id);
 
-        //    return chef;
-        //}
+            return chef;
+        }
 
 
         //public async Task<ChefModel> PostAsync(ChefModel chef)

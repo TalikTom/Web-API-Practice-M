@@ -84,7 +84,7 @@ namespace Practice.Repository
                             : query.OrderBy(chef => chef.HireDate);
                         break;
                     default:
-                        
+
                         query = sortOrder.ToLower() == "desc"
                             ? query.OrderByDescending(chef => chef.Id)
                             : query.OrderBy(chef => chef.Id);
@@ -118,16 +118,38 @@ namespace Practice.Repository
             return chefModels;
         }
 
+        public async Task<ChefModelDTO> GetByIdAsync(Guid id)
+        {
+            var query = await DbContext.Chef.AsQueryable()
+
+                   .Where(c => c.Id == id)
+                   .Select(c => new ChefModelDTO
+                   {
+                       Id = c.Id,
+                       FirstName = c.FirstName,
+                       LastName = c.LastName,
+                       PhoneNumber = c.PhoneNumber,
+                       HomeAddress = c.HomeAddress,
+                       Certified = c.Certified,
+                       OIB = c.OIB,
+                       HireDate = c.HireDate
+                   })
+                   .FirstOrDefaultAsync();
+
+            return query;
+
+
+
+
+        }
+
+
         //public Task<bool> DeleteAsync(Guid id)
         //{
 
         //}
 
 
-        //public Task<ChefModel> GetByIdAsync(Guid id)
-        //{
-
-        //}
 
         //public Task<ChefModel> PostAsync(ChefModel chef)
         //{

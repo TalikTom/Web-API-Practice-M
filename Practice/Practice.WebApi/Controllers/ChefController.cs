@@ -99,37 +99,37 @@ namespace Practice.WebApi.Controllers
             }
         }
 
-        //// GET home/waiter/5
-        //[HttpGet]
-        //[Route("home/chef/get-by-id/{id}")]
-        //public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
-        //{
+        // GET home/waiter/5
+        [HttpGet]
+        [Route("home/chef/get-by-id/{id}")]
+        public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
+        {
 
-        //    try
-        //    {
+            try
+            {
 
 
-        //        ChefModel chef = await ChefService.GetByIdAsync(id);
+                ChefModelDTO chef = await ChefService.GetByIdAsync(id);
 
-        //        ChefRestGet chefRest = new ChefRestGet();
+                ChefRestGet chefRest = new ChefRestGet();
 
-        //        chefRest.FirstName = chef.FirstName;
-        //        chefRest.LastName = chef.LastName;
-        //        chefRest.HireDate = chef.HireDate;
+                chefRest.FirstName = chef.FirstName;
+                chefRest.LastName = chef.LastName;
+                chefRest.HireDate = chef.HireDate;
 
-        //        if (chef == null)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.NotFound);
-        //        }
+                if (chef == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
 
-        //        return Request.CreateResponse(HttpStatusCode.OK, chefRest);
+                return Request.CreateResponse(HttpStatusCode.OK, chefRest);
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
-        //}
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+        }
 
         ////POST home/chef
         //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&HireDate=2022-03-21T12:00:00Z

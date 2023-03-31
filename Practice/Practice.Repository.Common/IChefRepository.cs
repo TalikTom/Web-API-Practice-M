@@ -12,7 +12,7 @@ namespace Practice.Repository.Common
     {
         Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
 
-        //Task<ChefModel> GetByIdAsync(Guid id);
+        Task<ChefModelDTO> GetByIdAsync(Guid id);
 
         //Task<bool> DeleteAsync(Guid id);
 
