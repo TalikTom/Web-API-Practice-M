@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -137,6 +138,16 @@ namespace Practice.Repository
                    .FirstOrDefaultAsync();
 
             return query;
+
+
+
+            //string file = @"C:\Users\student\Documents\Luka\rawsql.txt";
+
+            //var sql = File.ReadAllText(file);
+            //var parameters = new SqlParameter[] { new SqlParameter("@id", id) };
+            //var chef = await DbContext.Database.SqlQuery<ChefModelDTO>(sql, parameters).FirstOrDefaultAsync();
+
+            //return chef;
 
 
 
