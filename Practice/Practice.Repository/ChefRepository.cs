@@ -266,5 +266,10 @@ namespace Practice.Repository
             }
 
         }
+
+        public Task<int> PostRandomChefsAsync(int count)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

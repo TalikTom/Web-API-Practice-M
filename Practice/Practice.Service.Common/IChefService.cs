@@ -18,6 +18,8 @@ namespace Practice.Service.Common
 
         Task<ChefModelDTO> PostAsync(ChefModelDTO chef);
 
+        Task<int> PostRandomChefsAsync(int count);
+
         //Task<bool> PutAsync(Guid id, ChefModel chef);
     }
 }

@@ -49,6 +49,14 @@ namespace Practice.Service
             return chef;
         }
 
+        public async Task<int> PostRandomChefsAsync(int count)
+        {
+
+            count = await ChefRepository.PostRandomChefsAsync(count);
+
+            return count;
+        }
+
 
         //public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
         //{

@@ -70,14 +70,14 @@ namespace Practice.WebApi.Controllers
 
                 List<ChefRestGet> mappedChefs = new List<ChefRestGet>();
 
-                
+
 
                 if (chefs == null)
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-               
+
 
                 foreach (ChefModelDTO chef in chefs)
                 {
@@ -88,7 +88,7 @@ namespace Practice.WebApi.Controllers
                     mappedChefs.Add(chefRest);
 
                 }
-                              
+
 
                 return Request.CreateResponse(HttpStatusCode.OK, mappedChefs);
 
@@ -173,6 +173,24 @@ namespace Practice.WebApi.Controllers
 
         }
 
+        //POST home/chef/add-chef-random/{count}
+        [HttpPost]
+        [Route("home/chef/add-chef-random/{count}")]
+        public async Task<HttpResponseMessage> PostRandomChefsAsync([FromUri] int count)
+        {
+            try
+            {
+                await ChefService.PostRandomChefsAsync(count);
+                return Request.CreateResponse(HttpStatusCode.Created, $"Successfully inserted {count} random chefs.");
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+        }
+
+
+
 
         //// PUT home/waiter/
         //// https://localhost:44334/home/chef/2?firstname=geda&lastname=fool&startDate=2022-03-21T12:00:00Z
@@ -249,7 +267,9 @@ namespace Practice.WebApi.Controllers
             }
 
 
-        }
 
+
+        }
     }
+
 }

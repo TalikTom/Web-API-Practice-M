@@ -201,6 +201,18 @@ namespace Practice.Repository
         }
 
 
+        public async Task<int> PostRandomChefsAsync(int count)
+        {
+            var randomChefs = GenerateRandom.GenerateRandomChefs(count);
+
+            foreach (var chef in randomChefs)
+            {
+                await PostAsync(chef);
+            }
+
+            return count;
+        }
+
 
 
 
