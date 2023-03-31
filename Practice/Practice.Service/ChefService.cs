@@ -70,21 +70,21 @@ namespace Practice.Service
         //}
 
 
-        //public async task<bool> deleteasync(guid id)
-        //{
+        public async Task<bool> DeleteAsync(Guid id)
+        {
 
 
 
-        //    chefmodel chefexist = await chefrepository.getasync(id);
+            ChefModelDTO chefExist = await ChefRepository.GetByIdAsync(id);
 
-        //    if (chefexist == null)
-        //    {
-        //        return false;
-        //    }
+            if (chefExist == null)
+            {
+                return false;
+            }
 
-        //    bool chef = await chefrepository.deleteasync(id);
+            bool chef = await ChefRepository.DeleteAsync(id);
 
-        //    return chef;
-        //}
+            return chef;
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Practice.Repository.Common
 
         Task<ChefModelDTO> GetByIdAsync(Guid id);
 
-        //Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(Guid id);
 
         //Task<ChefModel> PostAsync(ChefModel chef);
 

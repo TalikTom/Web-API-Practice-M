@@ -155,10 +155,21 @@ namespace Practice.Repository
         }
 
 
-        //public Task<bool> DeleteAsync(Guid id)
-        //{
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var query = DbContext.Chef.AsQueryable();
 
-        //}
+            var chef = await query.FirstOrDefaultAsync(c => c.Id == id);
+
+            if (chef != null)
+            {
+                DbContext.Chef.Remove(chef);
+                await DbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
 
 
 

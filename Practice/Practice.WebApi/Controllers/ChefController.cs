@@ -221,35 +221,35 @@ namespace Practice.WebApi.Controllers
         //}
 
 
-        ////DELETE home/delete-chef/{id}
+        //DELETE home/delete-chef/{id}
 
-        //[HttpDelete]
-        //[Route("home/chef/delete-chef/{id}")]
-        //public async Task<HttpResponseMessage> DeleteAsync(Guid id)
-        //{
+        [HttpDelete]
+        [Route("home/chef/delete-chef/{id}")]
+        public async Task<HttpResponseMessage> DeleteAsync(Guid id)
+        {
 
-        //    try
-        //    {
-
-
-        //        bool chef = await ChefService.DeleteAsync(id);
+            try
+            {
 
 
-        //        if (chef == true)
-        //        {
-        //            return Request.CreateResponse(HttpStatusCode.OK, id);
-        //        }
-
-        //        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
-        //    }
-
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
-        //    }
+                bool chef = await ChefService.DeleteAsync(id);
 
 
-        //}
+                if (chef == true)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, id);
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Chef Not Found");
+            }
+
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, $"Something went wrong while processing your request. {e.Message}");
+            }
+
+
+        }
 
     }
 }
