@@ -29,7 +29,7 @@ namespace Practice.Repository
         public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
-            var query = DbContext.Chef.AsQueryable();
+            IQueryable<Chef> query = DbContext.Chef.AsQueryable();
 
 
             if (filteringChef != null)
@@ -97,14 +97,14 @@ namespace Practice.Repository
 
 
 
-            var chefs = await query.ToListAsync();
+            List<Chef> chefs = await query.ToListAsync();
 
             if (chefs.Count == 0)
             {
                 return null;
             }
 
-            var chefModels = chefs.Select(chef => new ChefModelDTO
+            List<ChefModelDTO> chefModels = chefs.Select(chef => new ChefModelDTO
             {
                 Id = chef.Id,
                 FirstName = chef.FirstName,
@@ -122,7 +122,7 @@ namespace Practice.Repository
 
         public async Task<ChefModelDTO> GetByIdAsync(Guid id)
         {
-            var query = await DbContext.Chef.AsQueryable()
+            ChefModelDTO query = await DbContext.Chef.AsQueryable()
 
                    .Where(c => c.Id == id)
                    .Select(c => new ChefModelDTO
@@ -155,9 +155,9 @@ namespace Practice.Repository
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var query = DbContext.Chef.AsQueryable();
+            IQueryable<Chef> query = DbContext.Chef.AsQueryable();
 
-            var chef = await query.FirstOrDefaultAsync(c => c.Id == id);
+            Chef chef = await query.FirstOrDefaultAsync(c => c.Id == id);
 
             if (chef != null)
             {
@@ -203,9 +203,9 @@ namespace Practice.Repository
 
         public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
         {
-            var query = DbContext.Chef.AsQueryable();
+            IQueryable<Chef> query = DbContext.Chef.AsQueryable();
 
-            var existingChef = await query.FirstOrDefaultAsync(c => c.Id == id);
+            Chef existingChef = await query.FirstOrDefaultAsync(c => c.Id == id);
 
             if (existingChef != null)
             {
@@ -227,9 +227,9 @@ namespace Practice.Repository
 
         public async Task<int> PostRandomChefsAsync(int count)
         {
-            var randomChefs = GenerateRandom.GenerateRandomChefs(count);
+            List<ChefModelDTO> randomChefs = GenerateRandom.GenerateRandomChefs(count);
 
-            foreach (var chef in randomChefs)
+            foreach (ChefModelDTO chef in randomChefs)
             {
                 await PostAsync(chef);
             }
