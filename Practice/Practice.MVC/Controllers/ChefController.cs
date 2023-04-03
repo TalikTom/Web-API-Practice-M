@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -123,6 +124,28 @@ namespace Practice.MVC.Controllers
 
             return RedirectToAction("FindAsync");
         }
+
+
+       
+
+
+        public async Task<ActionResult> PutAsync(Guid Id)
+        {
+
+
+            ChefModelDTO chef = new ChefModelDTO();
+                  
+            chef = await ChefService.GetByIdAsync(Id);
+
+            ChefView chefView = new ChefView();
+
+            chefView.FirstName = chef.FirstName;
+            chefView.LastName = chef.LastName;
+            chefView.HireDate = chef.HireDate;
+
+            return View(chefView);
+        }
+
 
 
 

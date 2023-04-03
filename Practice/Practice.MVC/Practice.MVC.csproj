@@ -217,6 +217,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Chef\FindAsync.cshtml" />
     <Content Include="Views\Chef\GetByIdAsync.cshtml" />
+    <Content Include="Views\Chef\PutAsync.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

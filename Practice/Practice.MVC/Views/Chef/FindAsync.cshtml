@@ -35,7 +35,8 @@
             @Html.DisplayFor(modelItem => item.HireDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+           
+            @Html.ActionLink("Edit", "PutAsync", "Chef", new { id = item.Id }, null)
             @Html.ActionLink("Details", "GetByIdAsync", "Chef", new { id = item.Id }, null) |
             <button type="button" class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</button>
         </td>
