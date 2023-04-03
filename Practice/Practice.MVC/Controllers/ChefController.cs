@@ -1,4 +1,5 @@
 ﻿using Practice.Common;
+using Practice.Dal;
 using Practice.Model;
 using Practice.MVC.Models;
 using Practice.Service.Common;
@@ -144,6 +145,23 @@ namespace Practice.MVC.Controllers
             chefView.HireDate = chef.HireDate;
 
             return View(chefView);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> PutAsync(ChefView chefView)
+        {
+
+            ChefModelDTO chef = new ChefModelDTO();
+
+            chef.FirstName = chefView.FirstName;
+            chef.LastName = chefView.LastName;
+            chef.HireDate = chefView.HireDate;
+
+
+            bool chefCheck = await ChefService.PutAsync(chef);
+
+            return RedirectToAction("Index");
         }
 
 
