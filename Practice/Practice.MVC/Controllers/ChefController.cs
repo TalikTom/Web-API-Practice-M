@@ -63,9 +63,12 @@ namespace Practice.MVC.Controllers
             foreach (ChefModelDTO chef in chefs)
             {
                 ChefView chefView = new ChefView();
+
                 chefView.FirstName = chef.FirstName;
                 chefView.LastName = chef.LastName;
                 chefView.HireDate = chef.HireDate;
+                chefView.Id = chef.Id;
+
                 mappedChefs.Add(chefView);
 
             }
@@ -83,7 +86,7 @@ namespace Practice.MVC.Controllers
 
             ChefModelDTO chef = await ChefService.GetByIdAsync(id);
 
-            
+
 
             if (chef == null)
             {
@@ -97,12 +100,32 @@ namespace Practice.MVC.Controllers
             chefView.LastName = chef.LastName;
             chefView.HireDate = chef.HireDate;
 
-           
+
             return View(chefView);
 
 
 
         }
 
+        public async Task<ActionResult> DeleteAsync(Guid id)
+        {
+
+
+
+            bool chef = await ChefService.DeleteAsync(id);
+
+
+            if (!chef)
+            {
+                //add notfound
+                return View();
+            }
+
+            return RedirectToAction("FindAsync");
+        }
+
+
+
     }
+
 }
