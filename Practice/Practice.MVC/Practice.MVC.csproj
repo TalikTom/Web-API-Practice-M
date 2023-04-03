@@ -154,7 +154,9 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IocConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ChefController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -213,6 +215,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Chef\FindAsync.cshtml" />
+    <Content Include="Views\Chef\GetByIdAsync.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -245,9 +249,37 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Practice.Common\Practice.Common.csproj">
+      <Project>{54B15CA2-EF54-4881-8B3A-589FC4C25968}</Project>
+      <Name>Practice.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Practice.Dal\Practice.DAL.csproj">
       <Project>{82cdae9b-056a-450d-8fc1-7ecd506a246f}</Project>
       <Name>Practice.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Model.Common\Practice.Model.Common.csproj">
+      <Project>{3F7BC11C-53D3-4812-87CD-FD84BDA92BA5}</Project>
+      <Name>Practice.Model.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Model\Practice.Model.csproj">
+      <Project>{3b50ecb6-84f2-42f0-9315-730cafb30d61}</Project>
+      <Name>Practice.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Repository.Common\Practice.Repository.Common.csproj">
+      <Project>{589F4D92-8465-4BD4-973F-29CB0FB58DEF}</Project>
+      <Name>Practice.Repository.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Repository\Practice.Repository.csproj">
+      <Project>{9B57862F-839A-4A1C-9A53-EA1270805F4B}</Project>
+      <Name>Practice.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Service.Common\Practice.Service.Common.csproj">
+      <Project>{53F5FF9B-B311-427F-B6AE-04DA5BEBC536}</Project>
+      <Name>Practice.Service.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Practice.Service\Practice.Service.csproj">
+      <Project>{53FCC6AC-EA7B-490D-A231-0672C6E1BD7C}</Project>
+      <Name>Practice.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

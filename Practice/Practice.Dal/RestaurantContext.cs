@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 
+
 namespace Practice.Dal
 {
     public partial class RestaurantContext : DbContext
@@ -136,5 +137,7 @@ namespace Practice.Dal
                 .WithRequired(e => e.Waiter)
                 .WillCascadeOnDelete(false);
         }
+
+        
     }
 }
