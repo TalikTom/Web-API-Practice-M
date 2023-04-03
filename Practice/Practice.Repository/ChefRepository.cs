@@ -58,7 +58,7 @@ namespace Practice.Repository
                 {
                     queryBuilder.Append($" ORDER BY {sorting.SortBy} {sorting.SortOrder}");
                 }
-                
+
 
                 if (paging != null)
                 {
