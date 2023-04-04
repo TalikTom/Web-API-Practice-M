@@ -24,7 +24,9 @@ namespace Practice.MVC.Controllers
             ChefService = chefService;
         }
 
-        // GET: All Chefs
+        /* --------------------------------------- */
+        // Get all Method (Find all)
+        /* --------------------------------------- */
         public async Task<ActionResult> FindAsync(int page = 1, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
         {
 
@@ -82,53 +84,84 @@ namespace Practice.MVC.Controllers
 
         }
 
-        // GetById: Get chef by id
+        /* --------------------------------------- */
+        // GetById Method - Get chef by id
+        /* --------------------------------------- */
         public async Task<ActionResult> GetByIdAsync(Guid id)
         {
-
-
-            ChefModelDTO chef = await ChefService.GetByIdAsync(id);
-
-
-
-            if (chef == null)
+            try
             {
-                ViewBag.ErrorMessage = "Chef not found.";
-                return View("Error");
+                ChefModelDTO chef = await ChefService.GetByIdAsync(id);
+
+
+
+                if (chef == null)
+                {
+                    ViewBag.ErrorMessage = "Chef not found.";
+                    return View("Error");
+                }
+
+                ChefDetailsView chefDetailsView = new ChefDetailsView();
+
+                chefDetailsView.Id = chef.Id;
+                chefDetailsView.FirstName = chef.FirstName;
+                chefDetailsView.LastName = chef.LastName;
+                chefDetailsView.PhoneNumber = chef.PhoneNumber;
+                chefDetailsView.HomeAddress = chef.HomeAddress;
+                chefDetailsView.Certified = chef.Certified;
+                chefDetailsView.OIB = chef.OIB;
+                chefDetailsView.HireDate = chef.HireDate;
+
+
+                return View(chefDetailsView);
             }
 
-            ChefDetailsView chefDetailsView = new ChefDetailsView();
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"An error occurred while deleting the chef. {ex}";
+            }
 
-            chefDetailsView.Id = chef.Id;
-            chefDetailsView.FirstName = chef.FirstName;
-            chefDetailsView.LastName = chef.LastName;
-            chefDetailsView.HireDate = chef.HireDate;
-            chefDetailsView.PhoneNumber = chef.PhoneNumber;
-            chefDetailsView.HomeAddress = chef.HomeAddress;
-            chefDetailsView.Certified = chef.Certified;
-            chefDetailsView.OIB = chef.OIB;
-            chefDetailsView.HireDate = chef.HireDate;
-
-
-            return View(chefDetailsView);
+            return View("Error");
+           
 
 
 
         }
+
+        /* --------------------------------------- */
+        // Delete Method - Delete by id
+        /* --------------------------------------- */
 
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
-
-            bool chef = await ChefService.DeleteAsync(id);
-
-
-            if (!chef)
+            try
             {
-                return View("Error");
+                bool chef = await ChefService.DeleteAsync(id);
+
+                if (!chef)
+                {
+                    ViewBag.ErrorMessage = "The chef could not be deleted. Please check if the specified chef exists.";
+                    return View("Error");
+                }
+
+                return RedirectToAction("FindAsync");
             }
 
-            return RedirectToAction("FindAsync");
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"An error occurred while deleting the chef. {ex}";
+            }
+
+            return View("Error");
         }
+
+
+
+
+
+        /* --------------------------------------- */
+        // Post Method - Create new
+        /* --------------------------------------- */
 
         public ActionResult PostAsync()
         {
@@ -142,54 +175,80 @@ namespace Practice.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                ChefModelDTO chef = new ChefModelDTO();
-
-                chef.FirstName = chefDetailsView.FirstName;
-                chef.LastName = chefDetailsView.LastName;
-                chef.HireDate = chefDetailsView.HireDate;
-                chef.PhoneNumber = chefDetailsView.PhoneNumber;
-                chef.HomeAddress = chefDetailsView.HomeAddress;
-                chef.Certified = chefDetailsView.Certified;
-                chef.OIB = chefDetailsView.OIB;
-                chef.HireDate = chefDetailsView.HireDate;
-
-
-                chef = await ChefService.PostAsync(chef);                                          
-
-
-                if (chef != null)
+                try
                 {
-                    return RedirectToAction("FindAsync");
+                    ChefModelDTO chef = new ChefModelDTO();
+
+                    chef.FirstName = chefDetailsView.FirstName;
+                    chef.LastName = chefDetailsView.LastName;
+                    chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                    chef.HomeAddress = chefDetailsView.HomeAddress;
+                    chef.Certified = chefDetailsView.Certified;
+                    chef.OIB = chefDetailsView.OIB;
+                    chef.HireDate = chefDetailsView.HireDate;
+
+                    chef = await ChefService.PostAsync(chef);
+
+                    if (chef != null)
+                    {
+                        return RedirectToAction("FindAsync");
+                    }
                 }
 
-            }                           
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = $"An error occurred while adding a new chef. {ex}";
+                }
+
+            }
 
             return View("Error");
 
         }
 
 
+        /* --------------------------------------- */
+        // PUT Method Id
+        /* --------------------------------------- */
+
+
         public async Task<ActionResult> PutAsync(Guid Id)
         {
+            try
+            {
+                ChefModelDTO chef = new ChefModelDTO();
 
 
-            ChefModelDTO chef = new ChefModelDTO();
-                  
-            chef = await ChefService.GetByIdAsync(Id);
+                chef = await ChefService.GetByIdAsync(Id);
 
-            ChefDetailsView chefDetailsView = new ChefDetailsView();
 
-            chefDetailsView.FirstName = chef.FirstName;
-            chefDetailsView.LastName = chef.LastName;
-            chefDetailsView.HireDate = chef.HireDate;
-            chefDetailsView.PhoneNumber = chef.PhoneNumber;
-            chefDetailsView.HomeAddress = chef.HomeAddress;
-            chefDetailsView.Certified = chef.Certified;
-            chefDetailsView.OIB = chef.OIB;
-            chefDetailsView.HireDate = chef.HireDate;
+                ChefDetailsView chefDetailsView = new ChefDetailsView();
 
-            return View(chefDetailsView);
+                chefDetailsView.FirstName = chef.FirstName;
+                chefDetailsView.LastName = chef.LastName;
+                chefDetailsView.PhoneNumber = chef.PhoneNumber;
+                chefDetailsView.HomeAddress = chef.HomeAddress;
+                chefDetailsView.Certified = chef.Certified;
+                chefDetailsView.OIB = chef.OIB;
+                chefDetailsView.HireDate = chef.HireDate;
+
+
+                return View(chefDetailsView);
+            }
+
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"An error occurred while fetching the chef's information. {ex}";
+            }
+
+            return View("Error");
+
         }
+
+
+        /* --------------------------------------- */
+        // PUT Method Submit
+        /* --------------------------------------- */
 
 
         [HttpPost]
@@ -198,21 +257,30 @@ namespace Practice.MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                ChefModelDTO chef = new ChefModelDTO();
+                try
+                {
+                    ChefModelDTO chef = new ChefModelDTO();
 
-                chef.FirstName = chefDetailsView.FirstName;
-                chef.LastName = chefDetailsView.LastName;
-                chef.HireDate = chefDetailsView.HireDate;
-                chef.PhoneNumber = chefDetailsView.PhoneNumber;
-                chef.HomeAddress = chefDetailsView.HomeAddress;
-                chef.Certified = chefDetailsView.Certified;
-                chef.OIB = chefDetailsView.OIB;
-                chef.HireDate = chefDetailsView.HireDate;
+                    chef.FirstName = chefDetailsView.FirstName;
+                    chef.LastName = chefDetailsView.LastName;
+                    chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                    chef.HomeAddress = chefDetailsView.HomeAddress;
+                    chef.Certified = chefDetailsView.Certified;
+                    chef.OIB = chefDetailsView.OIB;
+                    chef.HireDate = chefDetailsView.HireDate;
 
 
-                await ChefService.PutAsync(id, chef);
+                    await ChefService.PutAsync(id, chef);
 
-                return RedirectToAction("FindAsync");
+
+                    return RedirectToAction("FindAsync");
+                }
+
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = $"An error occurred while updating the chef's information. {ex}";
+                }
+
             }
 
             return View("Error");
@@ -221,7 +289,7 @@ namespace Practice.MVC.Controllers
         }
 
 
-        
+
 
     }
 
