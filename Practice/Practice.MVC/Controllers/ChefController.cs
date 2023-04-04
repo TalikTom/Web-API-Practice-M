@@ -57,7 +57,8 @@ namespace Practice.MVC.Controllers
 
             if (chefs == null)
             {
-                return View();
+                ViewBag.ErrorMessage = "Chefs not found.";
+                return View("Error");
             }
 
 
@@ -92,12 +93,13 @@ namespace Practice.MVC.Controllers
 
             if (chef == null)
             {
-                //add notfound
-                return View();
+                ViewBag.ErrorMessage = "Chef not found.";
+                return View("Error");
             }
 
             ChefDetailsView chefDetailsView = new ChefDetailsView();
 
+            chefDetailsView.Id = chef.Id;
             chefDetailsView.FirstName = chef.FirstName;
             chefDetailsView.LastName = chef.LastName;
             chefDetailsView.HireDate = chef.HireDate;
@@ -122,8 +124,7 @@ namespace Practice.MVC.Controllers
 
             if (!chef)
             {
-                //add notfound
-                return View();
+                return View("Error");
             }
 
             return RedirectToAction("FindAsync");
@@ -160,8 +161,7 @@ namespace Practice.MVC.Controllers
                 return RedirectToAction("FindAsync");
             }
 
-            //add error
-            return View();
+            return View("Error");
 
 
 
