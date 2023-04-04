@@ -2,7 +2,10 @@
 
 @{
     ViewBag.Title = "PutAsync";
+    var id = ViewContext.RouteData.Values["id"];
 }
+
+
 
 <h2>PutAsync</h2>
 
@@ -10,7 +13,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>ChefDetailsView</h4>
         <hr />
@@ -84,7 +87,8 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "FindAsync")
+    @Html.ActionLink("Back to List", "FindAsync") |
+    @Html.ActionLink("Back to Details", "GetByIdAsync", "Chef", new { id }, null)
 </div>
 
 @section Scripts {
