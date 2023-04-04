@@ -140,31 +140,31 @@ namespace Practice.MVC.Controllers
         public async Task<ActionResult> PostAsync(ChefDetailsView chefDetailsView)
         {
 
-
-            ChefModelDTO chef = new ChefModelDTO();
-
-            chef.FirstName = chefDetailsView.FirstName;
-            chef.LastName = chefDetailsView.LastName;
-            chef.HireDate = chefDetailsView.HireDate;
-            chef.PhoneNumber = chefDetailsView.PhoneNumber;
-            chef.HomeAddress = chefDetailsView.HomeAddress;
-            chef.Certified = chefDetailsView.Certified;
-            chef.OIB = chefDetailsView.OIB;
-            chef.HireDate = chefDetailsView.HireDate;
-
-            chef = await ChefService.PostAsync(chef);
-
-
-
-            if (chef != null)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("FindAsync");
-            }
+                ChefModelDTO chef = new ChefModelDTO();
+
+                chef.FirstName = chefDetailsView.FirstName;
+                chef.LastName = chefDetailsView.LastName;
+                chef.HireDate = chefDetailsView.HireDate;
+                chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                chef.HomeAddress = chefDetailsView.HomeAddress;
+                chef.Certified = chefDetailsView.Certified;
+                chef.OIB = chefDetailsView.OIB;
+                chef.HireDate = chefDetailsView.HireDate;
+
+
+                chef = await ChefService.PostAsync(chef);                                          
+
+
+                if (chef != null)
+                {
+                    return RedirectToAction("FindAsync");
+                }
+
+            }                           
 
             return View("Error");
-
-
-
 
         }
 
@@ -196,21 +196,28 @@ namespace Practice.MVC.Controllers
         public async Task<ActionResult> PutAsync(Guid id, ChefDetailsView chefDetailsView)
         {
 
-            ChefModelDTO chef = new ChefModelDTO();
+            if (ModelState.IsValid)
+            {
+                ChefModelDTO chef = new ChefModelDTO();
 
-            chef.FirstName = chefDetailsView.FirstName;
-            chef.LastName = chefDetailsView.LastName;
-            chef.HireDate = chefDetailsView.HireDate;
-            chef.PhoneNumber = chefDetailsView.PhoneNumber;
-            chef.HomeAddress = chefDetailsView.HomeAddress;
-            chef.Certified = chefDetailsView.Certified;
-            chef.OIB = chefDetailsView.OIB;
-            chef.HireDate = chefDetailsView.HireDate;
+                chef.FirstName = chefDetailsView.FirstName;
+                chef.LastName = chefDetailsView.LastName;
+                chef.HireDate = chefDetailsView.HireDate;
+                chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                chef.HomeAddress = chefDetailsView.HomeAddress;
+                chef.Certified = chefDetailsView.Certified;
+                chef.OIB = chefDetailsView.OIB;
+                chef.HireDate = chefDetailsView.HireDate;
 
 
-            await ChefService.PutAsync(id,chef);
+                await ChefService.PutAsync(id, chef);
 
-            return RedirectToAction("FindAsync");
+                return RedirectToAction("FindAsync");
+            }
+
+            return View("Error");
+
+
         }
 
 
