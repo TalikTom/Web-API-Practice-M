@@ -1,13 +1,23 @@
-﻿@model Practice.MVC.Models.ChefView
+﻿@model Practice.MVC.Models.ChefDetailsView
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "GetByIdAsync";
 }
 
-<h2>GetById</h2>
+<h2>GetByIdAsync</h2>
 
 <div>
-    <h4>ChefView</h4>
+    <h4>ChefDetailsView</h4>
+    @if (Model.Orders != null && Model.Orders.Any())
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Orders, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Orders, new SelectList(Model.Orders, "Id", "Id"), "-- Select Order --", new { @class = "form-control" })
+            </div>
+        </div>
+    }
+
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -27,6 +37,38 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HomeAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HomeAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Certified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Certified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OIB)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OIB)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.HireDate)
         </dt>
 
@@ -37,6 +79,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "PutAsync", "Chef", new { id = Model.Id }, null) |
     @Html.ActionLink("Back to List", "FindAsync")
 </p>

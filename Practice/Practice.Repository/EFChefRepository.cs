@@ -26,7 +26,7 @@ namespace Practice.Repository
         }
 
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search)
         {
 
             IQueryable<Chef> query = DbContext.Chef.AsQueryable();
@@ -95,6 +95,13 @@ namespace Practice.Repository
                 }
             }
 
+            if (search != null && !string.IsNullOrEmpty(search.SearchQuery))
+            {
+                string searchQuery = search.SearchQuery.ToLower();
+                query = query.Where(s => s.LastName.ToLower().Contains(searchQuery)
+                               || s.FirstName.ToLower().Contains(searchQuery));
+            }
+
 
 
             List<Chef> chefs = await query.ToListAsync();
@@ -134,7 +141,14 @@ namespace Practice.Repository
                        HomeAddress = c.HomeAddress,
                        Certified = c.Certified,
                        OIB = c.OIB,
-                       HireDate = c.HireDate
+                       HireDate = c.HireDate,
+                       CustomerOrder = c.CustomerOrder
+                               .Where(co => co.ChefId == c.Id)
+                               .Select(co => new Practice.Model.CustomerOrder
+                               {
+                                   Id = co.Id,
+                                   ChefId = co.ChefId
+                               }).ToList()
                    })
                    .FirstOrDefaultAsync();
 
