@@ -117,8 +117,6 @@ namespace Practice.MVC.Controllers
         public async Task<ActionResult> DeleteAsync(Guid id)
         {
 
-
-
             bool chef = await ChefService.DeleteAsync(id);
 
 
@@ -131,8 +129,44 @@ namespace Practice.MVC.Controllers
             return RedirectToAction("FindAsync");
         }
 
+        public ActionResult PostAsync()
+        {
+            return View();
+        }
 
-       
+
+        [HttpPost]
+        public async Task<ActionResult> PostAsync(ChefDetailsView chefDetailsView)
+        {
+
+
+            ChefModelDTO chef = new ChefModelDTO();
+
+            chef.FirstName = chefDetailsView.FirstName;
+            chef.LastName = chefDetailsView.LastName;
+            chef.HireDate = chefDetailsView.HireDate;
+            chef.PhoneNumber = chefDetailsView.PhoneNumber;
+            chef.HomeAddress = chefDetailsView.HomeAddress;
+            chef.Certified = chefDetailsView.Certified;
+            chef.OIB = chefDetailsView.OIB;
+            chef.HireDate = chefDetailsView.HireDate;
+
+            chef = await ChefService.PostAsync(chef);
+
+
+
+            if (chef != null)
+            {
+                return RedirectToAction("FindAsync");
+            }
+
+            //add error
+            return View();
+
+
+
+
+        }
 
 
         public async Task<ActionResult> PutAsync(Guid Id)
@@ -180,7 +214,7 @@ namespace Practice.MVC.Controllers
         }
 
 
-
+        
 
     }
 
