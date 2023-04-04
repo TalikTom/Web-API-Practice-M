@@ -163,6 +163,7 @@
     </Compile>
     <Compile Include="Models\ChefDetailsView.cs" />
     <Compile Include="Models\ChefView.cs" />
+    <Compile Include="Models\OrderView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -134,7 +134,14 @@ namespace Practice.Repository
                        HomeAddress = c.HomeAddress,
                        Certified = c.Certified,
                        OIB = c.OIB,
-                       HireDate = c.HireDate
+                       HireDate = c.HireDate,
+                       CustomerOrder = c.CustomerOrder
+                               .Where(co => co.ChefId == c.Id)
+                               .Select(co => new Practice.Model.CustomerOrder
+                               {
+                                   Id = co.Id,
+                                   ChefId = co.ChefId
+                               }).ToList()
                    })
                    .FirstOrDefaultAsync();
 

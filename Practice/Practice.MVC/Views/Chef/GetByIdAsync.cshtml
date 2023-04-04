@@ -8,6 +8,12 @@
 
 <div>
     <h4>ChefDetailsView</h4>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Orders, new SelectList(Model.Orders, "Id", "Id"), "-- Select Order --", new { @class = "form-control" })
+        </div>
+    </div>
     <hr />
     <dl class="dl-horizontal">
         <dt>

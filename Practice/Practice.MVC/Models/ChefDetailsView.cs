@@ -33,5 +33,7 @@ namespace Practice.MVC.Models
 
         [Required]
         public DateTime HireDate { get; set; }
+
+        public List<OrderView> Orders { get; set; }
     }
 }

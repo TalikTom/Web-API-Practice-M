@@ -31,6 +31,7 @@ namespace Practice.Model
 
         public DateTime HireDate { get; set; }
 
+        public List<CustomerOrder> CustomerOrder { get; set; }
 
 
     }

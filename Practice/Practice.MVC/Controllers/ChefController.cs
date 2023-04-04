@@ -112,6 +112,12 @@ namespace Practice.MVC.Controllers
                 chefDetailsView.OIB = chef.OIB;
                 chefDetailsView.HireDate = chef.HireDate;
 
+                chefDetailsView.Orders = chef.CustomerOrder.Select(co => new OrderView
+                {
+                    Id = co.Id
+
+                }).ToList();
+
 
                 return View(chefDetailsView);
             }
