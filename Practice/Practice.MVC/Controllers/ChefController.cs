@@ -27,13 +27,18 @@ namespace Practice.MVC.Controllers
         /* --------------------------------------- */
         // Get all Method (Find all)
         /* --------------------------------------- */
-        public async Task<ActionResult> FindAsync(int page = 1, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
+        public async Task<ActionResult> FindAsync(string searchString = null, int page = 1, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
         {
 
             Paging paging = new Paging
             {
                 Page = page,
                 ItemsPerPage = itemsPerPage
+            };
+
+            SearchString search = new SearchString
+            {
+                SearchQuery = searchString
             };
 
             Sorting sorting = new Sorting
@@ -49,9 +54,10 @@ namespace Practice.MVC.Controllers
                 LastName = lastName,
                 HireDate = hireDate
             };
+                       
 
 
-            List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
+            List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef, search);
 
             List<ChefView> mappedChefs = new List<ChefView>();
 
