@@ -26,7 +26,7 @@ namespace Practice.Repository
         }
 
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
             IQueryable<Chef> query = DbContext.Chef.AsQueryable();
@@ -35,17 +35,13 @@ namespace Practice.Repository
             if (filteringChef != null)
             {
 
-                if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                if (!string.IsNullOrEmpty(filteringChef.SearchQuery))
                 {
-                    query = query.Where(chef => chef.FirstName.ToLower().Contains(filteringChef.FirstName.ToLower()));
-
+                    string searchQuery = filteringChef.SearchQuery.ToLower();
+                    query = query.Where(s => s.LastName.ToLower().Contains(searchQuery)
+                                   || s.FirstName.ToLower().Contains(searchQuery));
                 }
-
-                if (!string.IsNullOrEmpty(filteringChef.LastName))
-                {
-                    query = query.Where(chef => chef.LastName.ToLower().Contains(filteringChef.LastName.ToLower()));
-
-                }
+                                
 
                 if (filteringChef.HireDate.HasValue)
                 {
@@ -95,12 +91,6 @@ namespace Practice.Repository
                 }
             }
 
-            if (search != null && !string.IsNullOrEmpty(search.SearchQuery))
-            {
-                string searchQuery = search.SearchQuery.ToLower();
-                query = query.Where(s => s.LastName.ToLower().Contains(searchQuery)
-                               || s.FirstName.ToLower().Contains(searchQuery));
-            }
 
 
 

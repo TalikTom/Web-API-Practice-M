@@ -36,11 +36,7 @@ namespace Practice.MVC.Controllers
                 ItemsPerPage = itemsPerPage
             };
 
-            SearchString search = new SearchString
-            {
-                SearchQuery = searchString
-            };
-
+           
             Sorting sorting = new Sorting
             {
                 SortBy = sortBy,
@@ -50,14 +46,13 @@ namespace Practice.MVC.Controllers
 
             ChefFilter filteringChef = new ChefFilter()
             {
-                FirstName = firstName,
-                LastName = lastName,
+                SearchQuery = searchString,
                 HireDate = hireDate
             };
                        
 
 
-            List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef, search);
+            List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
 
             List<ChefView> mappedChefs = new List<ChefView>();
 

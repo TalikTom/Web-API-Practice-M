@@ -23,7 +23,7 @@ namespace Practice.Repository
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
 
@@ -36,17 +36,17 @@ namespace Practice.Repository
 
                 SqlCommand cm = new SqlCommand();
 
-                if (!string.IsNullOrEmpty(filteringChef.FirstName))
-                {
-                    queryBuilder.Append(" AND FirstName LIKE @FirstName");
-                    cm.Parameters.AddWithValue("@FirstName", $"%{filteringChef.FirstName}%");
-                }
+                //if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                //{
+                //    queryBuilder.Append(" AND FirstName LIKE @FirstName");
+                //    cm.Parameters.AddWithValue("@FirstName", $"%{filteringChef.FirstName}%");
+                //}
 
-                if (!string.IsNullOrEmpty(filteringChef.LastName))
-                {
-                    queryBuilder.Append(" AND LastName LIKE @LastName");
-                    cm.Parameters.AddWithValue("@LastName", $"%{filteringChef.LastName}%");
-                }
+                //if (!string.IsNullOrEmpty(filteringChef.LastName))
+                //{
+                //    queryBuilder.Append(" AND LastName LIKE @LastName");
+                //    cm.Parameters.AddWithValue("@LastName", $"%{filteringChef.LastName}%");
+                //}
 
                 if (filteringChef.HireDate.HasValue)
                 {

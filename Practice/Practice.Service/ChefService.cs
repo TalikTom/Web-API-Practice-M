@@ -23,10 +23,10 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search)
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
            
-            List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef, search);
+            List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
 
             return chefs;
         }
