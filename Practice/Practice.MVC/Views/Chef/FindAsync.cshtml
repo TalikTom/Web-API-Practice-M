@@ -6,11 +6,15 @@
 
 <h2>FindAsync</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("FindAsync", "Chef", FormMethod.Get))
 {
     <p>
-        Find by first or last name: @Html.TextBox("SearchString")
+        Find by first or last name: @Html.TextBox("searchString")
         <input type="submit" value="Search" />
+    </p>
+    <p>
+        Filter by hire date: @Html.TextBox("hireDate", "", new { @type = "date" })
+        <input type="submit" value="Search" /><input type="submit" value="Clear Hire Date Filter" onclick="clearHireDateFilter();" />
     </p>
 }
 
@@ -60,5 +64,9 @@
         if (confirm("Are you sure you want to delete this item?")) {
             window.location.href = "/Chef/DeleteAsync/" + id;
         }
+    }
+
+    function clearHireDateFilter() {
+        document.getElementsByName("hireDate")[0].value = "";
     }
 </script>

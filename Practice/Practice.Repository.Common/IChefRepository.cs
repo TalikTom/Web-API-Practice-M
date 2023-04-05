@@ -1,4 +1,5 @@
-﻿using Practice.Common;
+﻿using PagedList;
+using Practice.Common;
 using Practice.Model;
 using System;
 using System.Collections.Generic;

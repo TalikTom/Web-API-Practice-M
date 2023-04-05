@@ -13,7 +13,7 @@ namespace Practice.Common
 
         private int _itemsPerPage = 3;
 
-        public int Page { get; set; } = 1;
+        public int? Page { get; set; } = 1;
 
 
 
@@ -23,5 +23,6 @@ namespace Practice.Common
             set => _itemsPerPage = value > _maxItemsPerPage ? _maxItemsPerPage : value;
         }
 
+        
     }
 }

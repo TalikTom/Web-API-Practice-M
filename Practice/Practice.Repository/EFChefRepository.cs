@@ -1,4 +1,5 @@
-﻿using Practice.Common;
+﻿using PagedList;
+using Practice.Common;
 using Practice.Dal;
 using Practice.Model;
 using Practice.Repository.Common;
@@ -31,6 +32,8 @@ namespace Practice.Repository
 
             IQueryable<Chef> query = DbContext.Chef.AsQueryable();
 
+            
+            int pageNumber = (paging.Page ?? 1);
 
             if (filteringChef != null)
             {
@@ -45,15 +48,15 @@ namespace Practice.Repository
 
                 if (filteringChef.HireDate.HasValue)
                 {
-                    query = query.Where(chef => chef.HireDate == filteringChef.HireDate.Value);
+                    query = query.Where(chef => chef.HireDate >= filteringChef.HireDate.Value);
                 }
 
             }
-
+            
 
             if (paging != null)
             {
-                int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                int offset = (pageNumber - 1) * paging.ItemsPerPage;
                 int fetchNext = paging.ItemsPerPage;
 
                 query = query.OrderBy(x => x.Id).Skip(offset).Take(fetchNext);
@@ -101,6 +104,9 @@ namespace Practice.Repository
                 return null;
             }
 
+         
+
+
             List<ChefModelDTO> chefModels = chefs.Select(chef => new ChefModelDTO
             {
                 Id = chef.Id,
@@ -112,6 +118,7 @@ namespace Practice.Repository
                 OIB = chef.OIB,
                 HireDate = chef.HireDate
             }).ToList();
+
 
             return chefModels;
         }

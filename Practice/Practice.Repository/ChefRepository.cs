@@ -62,8 +62,8 @@ namespace Practice.Repository
 
                 if (paging != null)
                 {
-                    int offset = (paging.Page - 1) * paging.ItemsPerPage;
-                    int fetchNext = paging.ItemsPerPage;
+                    //int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                    //int fetchNext = paging.ItemsPerPage;
 
                     queryBuilder.Append(" OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY");
 

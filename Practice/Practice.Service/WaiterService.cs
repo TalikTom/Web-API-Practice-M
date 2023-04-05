@@ -10,16 +10,16 @@ using Practice.Service.Common;
 
 namespace Practice.Service
 {
-    public class WaiterService : IWaiterService
-    {
+    //public class WaiterService : IWaiterService
+    //{
 
-        public async Task<List<WaiterModel>> GetAllAsync(Paging paging)
-        {
+    //    public async Task<List<WaiterModel>> GetAllAsync(Paging paging)
+    //    {
 
-            List<WaiterModel> chefs = new List<WaiterModel>();
+    //        List<WaiterModel> chefs = new List<WaiterModel>();
 
-            return chefs;
-        }
+    //        return chefs;
+    //    }
 
-    }
+    //}
 }

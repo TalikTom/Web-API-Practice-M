@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Practice.Service.Common
 {
-    public interface IWaiterService
-    {
-        Task<List<WaiterModel>> GetAllAsync(Paging paging);
-    }
+    //public interface IWaiterService
+    //{
+    //    Task<List<WaiterModel>> GetAllAsync(Paging paging);
+    //}
 }

@@ -16,7 +16,7 @@ namespace Practice.Service
 
         protected IChefRepository ChefRepository;
 
-        protected IWaiterService WaiterService;
+       
 
         public ChefService(IChefRepository chefRepository)
         {

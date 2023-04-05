@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
 
 namespace Practice.MVC.Controllers
 {
@@ -27,9 +29,10 @@ namespace Practice.MVC.Controllers
         /* --------------------------------------- */
         // Get all Method (Find all)
         /* --------------------------------------- */
-        public async Task<ActionResult> FindAsync(string searchString = null, int page = 1, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
+        public async Task<ActionResult> FindAsync(int? page, string searchString = null, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", DateTime? hireDate = null)
         {
 
+           
             Paging paging = new Paging
             {
                 Page = page,
@@ -57,6 +60,8 @@ namespace Practice.MVC.Controllers
             ViewBag.SortBy = sortBy;
             ViewBag.SortOrder = sortOrder == "asc" ? "desc" : "asc";
 
+
+
             List<ChefView> mappedChefs = new List<ChefView>();
 
 
@@ -80,8 +85,9 @@ namespace Practice.MVC.Controllers
 
                 mappedChefs.Add(chefView);
 
-            }
-
+            }   
+                      
+           
 
             return View(mappedChefs);
 
