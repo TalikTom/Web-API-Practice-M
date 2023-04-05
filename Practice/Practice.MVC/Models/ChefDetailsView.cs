@@ -32,6 +32,7 @@ namespace Practice.MVC.Models
         public string OIB { get; set; }
 
         [Required]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyyTHH:mm}")]
         public DateTime HireDate { get; set; }
 
         public List<OrderView> Orders { get; set; }

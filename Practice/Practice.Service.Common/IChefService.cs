@@ -1,4 +1,5 @@
-﻿using Practice.Common;
+﻿using PagedList;
+using Practice.Common;
 using Practice.Model;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Practice.Service.Common
 {
     public interface IChefService
     {
-        Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search);
+        Task<IPagedList<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
 
         Task<ChefModelDTO> GetByIdAsync(Guid id);
 

@@ -11,6 +11,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
+using AutoMapper;
 
 namespace Practice.MVC.Controllers
 {
@@ -18,29 +21,28 @@ namespace Practice.MVC.Controllers
     {
 
         protected IChefService ChefService;
+        private readonly IMapper _mapper;
 
-        public ChefController(IChefService chefService)
+        public ChefController(IChefService chefService, IMapper mapper)
         {
             ChefService = chefService;
+            _mapper = mapper;
         }
 
         /* --------------------------------------- */
         // Get all Method (Find all)
         /* --------------------------------------- */
-        public async Task<ActionResult> FindAsync(string searchString = null, int page = 1, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", string firstName = "", string lastName = "", DateTime? hireDate = null)
+        public async Task<ActionResult> FindAsync(int? page, string searchString = null, int itemsPerPage = 10, string sortBy = "Id", string sortOrder = "asc", DateTime? hireDate = null)
         {
 
+           
             Paging paging = new Paging
             {
                 Page = page,
                 ItemsPerPage = itemsPerPage
             };
 
-            SearchString search = new SearchString
-            {
-                SearchQuery = searchString
-            };
-
+           
             Sorting sorting = new Sorting
             {
                 SortBy = sortBy,
@@ -50,16 +52,21 @@ namespace Practice.MVC.Controllers
 
             ChefFilter filteringChef = new ChefFilter()
             {
-                FirstName = firstName,
-                LastName = lastName,
+                SearchQuery = searchString,
                 HireDate = hireDate
             };
                        
 
 
-            List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef, search);
+            IPagedList<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
 
-            List<ChefView> mappedChefs = new List<ChefView>();
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortOrder = sortOrder == "asc" ? "desc" : "asc";
+
+
+            List<ChefView> mappedChefs = _mapper.Map<List<ChefView>>(chefs);
+
+            //List<ChefView> mappedChefs = new List<ChefView>();
 
 
 
@@ -71,19 +78,20 @@ namespace Practice.MVC.Controllers
 
 
 
-            foreach (ChefModelDTO chef in chefs)
-            {
-                ChefView chefView = new ChefView();
+            //foreach (ChefModelDTO chef in chefs)
+            //{
+            //    ChefView chefView = new ChefView();
 
-                chefView.FirstName = chef.FirstName;
-                chefView.LastName = chef.LastName;
-                chefView.HireDate = chef.HireDate;
-                chefView.Id = chef.Id;
+            //    chefView.FirstName = chef.FirstName;
+            //    chefView.LastName = chef.LastName;
+            //    chefView.HireDate = chef.HireDate;
+            //    chefView.Id = chef.Id;
 
-                mappedChefs.Add(chefView);
+            //    mappedChefs.Add(chefView);
 
-            }
-
+            //}   
+                      
+           
 
             return View(mappedChefs);
 
@@ -107,16 +115,18 @@ namespace Practice.MVC.Controllers
                     return View("Error");
                 }
 
-                ChefDetailsView chefDetailsView = new ChefDetailsView();
+                ChefDetailsView chefDetailsView = _mapper.Map<ChefModelDTO, ChefDetailsView>(chef);
 
-                chefDetailsView.Id = chef.Id;
-                chefDetailsView.FirstName = chef.FirstName;
-                chefDetailsView.LastName = chef.LastName;
-                chefDetailsView.PhoneNumber = chef.PhoneNumber;
-                chefDetailsView.HomeAddress = chef.HomeAddress;
-                chefDetailsView.Certified = chef.Certified;
-                chefDetailsView.OIB = chef.OIB;
-                chefDetailsView.HireDate = chef.HireDate;
+                //ChefDetailsView chefDetailsView = new ChefDetailsView();
+
+                //chefDetailsView.Id = chef.Id;
+                //chefDetailsView.FirstName = chef.FirstName;
+                //chefDetailsView.LastName = chef.LastName;
+                //chefDetailsView.PhoneNumber = chef.PhoneNumber;
+                //chefDetailsView.HomeAddress = chef.HomeAddress;
+                //chefDetailsView.Certified = chef.Certified;
+                //chefDetailsView.OIB = chef.OIB;
+                //chefDetailsView.HireDate = chef.HireDate;
 
                 chefDetailsView.Orders = chef.CustomerOrder.Select(co => new OrderView
                 {
@@ -189,15 +199,17 @@ namespace Practice.MVC.Controllers
             {
                 try
                 {
-                    ChefModelDTO chef = new ChefModelDTO();
+                    ChefModelDTO chef = _mapper.Map<ChefDetailsView, ChefModelDTO>(chefDetailsView);
 
-                    chef.FirstName = chefDetailsView.FirstName;
-                    chef.LastName = chefDetailsView.LastName;
-                    chef.PhoneNumber = chefDetailsView.PhoneNumber;
-                    chef.HomeAddress = chefDetailsView.HomeAddress;
-                    chef.Certified = chefDetailsView.Certified;
-                    chef.OIB = chefDetailsView.OIB;
-                    chef.HireDate = chefDetailsView.HireDate;
+                    //ChefModelDTO chef = new ChefModelDTO();
+
+                    //chef.FirstName = chefDetailsView.FirstName;
+                    //chef.LastName = chefDetailsView.LastName;
+                    //chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                    //chef.HomeAddress = chefDetailsView.HomeAddress;
+                    //chef.Certified = chefDetailsView.Certified;
+                    //chef.OIB = chefDetailsView.OIB;
+                    //chef.HireDate = chefDetailsView.HireDate;
 
                     chef = await ChefService.PostAsync(chef);
 
@@ -228,21 +240,20 @@ namespace Practice.MVC.Controllers
         {
             try
             {
-                ChefModelDTO chef = new ChefModelDTO();
+                ChefModelDTO chef = await ChefService.GetByIdAsync(Id);
 
 
-                chef = await ChefService.GetByIdAsync(Id);
+                ChefDetailsView chefDetailsView = _mapper.Map<ChefModelDTO, ChefDetailsView>(chef);
 
+                //ChefDetailsView chefDetailsView = new ChefDetailsView();
 
-                ChefDetailsView chefDetailsView = new ChefDetailsView();
-
-                chefDetailsView.FirstName = chef.FirstName;
-                chefDetailsView.LastName = chef.LastName;
-                chefDetailsView.PhoneNumber = chef.PhoneNumber;
-                chefDetailsView.HomeAddress = chef.HomeAddress;
-                chefDetailsView.Certified = chef.Certified;
-                chefDetailsView.OIB = chef.OIB;
-                chefDetailsView.HireDate = chef.HireDate;
+                //chefDetailsView.FirstName = chef.FirstName;
+                //chefDetailsView.LastName = chef.LastName;
+                //chefDetailsView.PhoneNumber = chef.PhoneNumber;
+                //chefDetailsView.HomeAddress = chef.HomeAddress;
+                //chefDetailsView.Certified = chef.Certified;
+                //chefDetailsView.OIB = chef.OIB;
+                //chefDetailsView.HireDate = chef.HireDate;
 
 
                 return View(chefDetailsView);
@@ -271,15 +282,17 @@ namespace Practice.MVC.Controllers
             {
                 try
                 {
-                    ChefModelDTO chef = new ChefModelDTO();
+                    ChefModelDTO chef = _mapper.Map<ChefDetailsView, ChefModelDTO>(chefDetailsView);
 
-                    chef.FirstName = chefDetailsView.FirstName;
-                    chef.LastName = chefDetailsView.LastName;
-                    chef.PhoneNumber = chefDetailsView.PhoneNumber;
-                    chef.HomeAddress = chefDetailsView.HomeAddress;
-                    chef.Certified = chefDetailsView.Certified;
-                    chef.OIB = chefDetailsView.OIB;
-                    chef.HireDate = chefDetailsView.HireDate;
+                    //ChefModelDTO chef = new ChefModelDTO();
+
+                    //chef.FirstName = chefDetailsView.FirstName;
+                    //chef.LastName = chefDetailsView.LastName;
+                    //chef.PhoneNumber = chefDetailsView.PhoneNumber;
+                    //chef.HomeAddress = chefDetailsView.HomeAddress;
+                    //chef.Certified = chefDetailsView.Certified;
+                    //chef.OIB = chefDetailsView.OIB;
+                    //chef.HireDate = chefDetailsView.HireDate;
 
 
                     await ChefService.PutAsync(id, chef);

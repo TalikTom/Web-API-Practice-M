@@ -1,4 +1,5 @@
-﻿using Practice.Common;
+﻿using PagedList;
+using Practice.Common;
 using Practice.Dal;
 using Practice.Model;
 using Practice.Repository.Common;
@@ -26,38 +27,36 @@ namespace Practice.Repository
         }
 
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef, SearchString search)
+        public async Task<IPagedList<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
             IQueryable<Chef> query = DbContext.Chef.AsQueryable();
 
+            
+            int pageNumber = (paging.Page ?? 1);
 
             if (filteringChef != null)
             {
 
-                if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                if (!string.IsNullOrEmpty(filteringChef.SearchQuery))
                 {
-                    query = query.Where(chef => chef.FirstName.ToLower().Contains(filteringChef.FirstName.ToLower()));
-
+                    string searchQuery = filteringChef.SearchQuery.ToLower();
+                    query = query.Where(s => s.LastName.ToLower().Contains(searchQuery)
+                                   || s.FirstName.ToLower().Contains(searchQuery));
                 }
-
-                if (!string.IsNullOrEmpty(filteringChef.LastName))
-                {
-                    query = query.Where(chef => chef.LastName.ToLower().Contains(filteringChef.LastName.ToLower()));
-
-                }
+                                
 
                 if (filteringChef.HireDate.HasValue)
                 {
-                    query = query.Where(chef => chef.HireDate == filteringChef.HireDate.Value);
+                    query = query.Where(chef => chef.HireDate >= filteringChef.HireDate.Value);
                 }
 
             }
-
+            
 
             if (paging != null)
             {
-                int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                int offset = (pageNumber - 1) * paging.ItemsPerPage;
                 int fetchNext = paging.ItemsPerPage;
 
                 query = query.OrderBy(x => x.Id).Skip(offset).Take(fetchNext);
@@ -95,12 +94,6 @@ namespace Practice.Repository
                 }
             }
 
-            if (search != null && !string.IsNullOrEmpty(search.SearchQuery))
-            {
-                string searchQuery = search.SearchQuery.ToLower();
-                query = query.Where(s => s.LastName.ToLower().Contains(searchQuery)
-                               || s.FirstName.ToLower().Contains(searchQuery));
-            }
 
 
 
@@ -111,17 +104,28 @@ namespace Practice.Repository
                 return null;
             }
 
-            List<ChefModelDTO> chefModels = chefs.Select(chef => new ChefModelDTO
-            {
-                Id = chef.Id,
-                FirstName = chef.FirstName,
-                LastName = chef.LastName,
-                PhoneNumber = chef.PhoneNumber,
-                HomeAddress = chef.HomeAddress,
-                Certified = chef.Certified,
-                OIB = chef.OIB,
-                HireDate = chef.HireDate
-            }).ToList();
+
+
+            IPagedList<Chef> pagedChefs = new StaticPagedList<Chef>(chefs, pageNumber, paging.ItemsPerPage, chefs.Count);
+
+            IPagedList<ChefModelDTO> chefModels = new StaticPagedList<ChefModelDTO>(
+                pagedChefs.Select(chef => new ChefModelDTO
+                {
+                    Id = chef.Id,
+                    FirstName = chef.FirstName,
+                    LastName = chef.LastName,
+                    PhoneNumber = chef.PhoneNumber,
+                    HomeAddress = chef.HomeAddress,
+                    Certified = chef.Certified,
+                    OIB = chef.OIB,
+                    HireDate = chef.HireDate
+                }),
+                pagedChefs.PageNumber,
+                pagedChefs.PageSize,
+                pagedChefs.TotalItemCount
+            );
+
+
 
             return chefModels;
         }

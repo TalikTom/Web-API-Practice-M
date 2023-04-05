@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using AutoMapper;
 using Practice.Dal;
+using Practice.MVC.Mapping;
 using Practice.Repository;
 using Practice.Repository.Common;
 using Practice.Service;
@@ -12,6 +14,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+
+
 
 namespace Practice.MVC.App_Start
 {
@@ -28,6 +32,18 @@ namespace Practice.MVC.App_Start
 
             builder.RegisterType<ChefService>().As<IChefService>().InstancePerRequest();
             builder.RegisterType<EFChefRepository>().As<IChefRepository>().InstancePerRequest();
+
+            //mapper
+
+            builder.Register(context => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            })).AsSelf().SingleInstance();
+
+            builder.Register(context => context.Resolve<MapperConfiguration>().CreateMapper())
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
+
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
