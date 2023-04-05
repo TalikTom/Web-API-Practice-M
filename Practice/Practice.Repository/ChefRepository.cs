@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace Practice.Repository
 {
-    public class ChefRepository : IChefRepository
+    public class ChefRepository /*: IChefRepository*/
     {
 
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
