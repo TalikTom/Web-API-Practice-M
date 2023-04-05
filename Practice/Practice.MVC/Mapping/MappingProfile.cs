@@ -15,7 +15,6 @@ namespace Practice.MVC.Mapping
             CreateMap<ChefModelDTO, ChefView>();
             CreateMap<ChefModelDTO, ChefDetailsView>();
             CreateMap<ChefDetailsView, ChefModelDTO>();
-
         }
     }
 }

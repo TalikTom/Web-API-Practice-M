@@ -27,7 +27,7 @@ namespace Practice.Repository
         }
 
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<IPagedList<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
             IQueryable<Chef> query = DbContext.Chef.AsQueryable();
@@ -104,20 +104,27 @@ namespace Practice.Repository
                 return null;
             }
 
-         
 
 
-            List<ChefModelDTO> chefModels = chefs.Select(chef => new ChefModelDTO
-            {
-                Id = chef.Id,
-                FirstName = chef.FirstName,
-                LastName = chef.LastName,
-                PhoneNumber = chef.PhoneNumber,
-                HomeAddress = chef.HomeAddress,
-                Certified = chef.Certified,
-                OIB = chef.OIB,
-                HireDate = chef.HireDate
-            }).ToList();
+            IPagedList<Chef> pagedChefs = new StaticPagedList<Chef>(chefs, pageNumber, paging.ItemsPerPage, chefs.Count);
+
+            IPagedList<ChefModelDTO> chefModels = new StaticPagedList<ChefModelDTO>(
+                pagedChefs.Select(chef => new ChefModelDTO
+                {
+                    Id = chef.Id,
+                    FirstName = chef.FirstName,
+                    LastName = chef.LastName,
+                    PhoneNumber = chef.PhoneNumber,
+                    HomeAddress = chef.HomeAddress,
+                    Certified = chef.Certified,
+                    OIB = chef.OIB,
+                    HireDate = chef.HireDate
+                }),
+                pagedChefs.PageNumber,
+                pagedChefs.PageSize,
+                pagedChefs.TotalItemCount
+            );
+
 
 
             return chefModels;

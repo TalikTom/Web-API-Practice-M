@@ -1,4 +1,5 @@
-﻿using Practice.Common;
+﻿using PagedList;
+using Practice.Common;
 using Practice.Model;
 using Practice.Repository;
 using Practice.Repository.Common;
@@ -23,10 +24,10 @@ namespace Practice.Service
             ChefRepository = chefRepository;
         }
 
-        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
+        public async Task<IPagedList<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
-           
-            List<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
+
+            IPagedList<ChefModelDTO> chefs = await ChefRepository.FindAsync(paging, sorting, filteringChef);
 
             return chefs;
         }

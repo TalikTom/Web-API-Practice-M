@@ -33,6 +33,7 @@ namespace Practice.MVC.App_Start
             builder.RegisterType<ChefService>().As<IChefService>().InstancePerRequest();
             builder.RegisterType<EFChefRepository>().As<IChefRepository>().InstancePerRequest();
 
+            //mapper
 
             builder.Register(context => new MapperConfiguration(cfg =>
             {
