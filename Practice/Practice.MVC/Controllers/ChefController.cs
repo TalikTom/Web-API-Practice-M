@@ -54,6 +54,9 @@ namespace Practice.MVC.Controllers
 
             List<ChefModelDTO> chefs = await ChefService.FindAsync(paging, sorting, filteringChef);
 
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortOrder = sortOrder == "asc" ? "desc" : "asc";
+
             List<ChefView> mappedChefs = new List<ChefView>();
 
 

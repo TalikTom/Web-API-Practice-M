@@ -20,13 +20,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.ActionLink("First Name", "FindAsync", new { sortBy = "FirstName", sortOrder = ViewBag.SortOrder })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.ActionLink("Last Name", "FindAsync", new { sortBy = "LastName", sortOrder = ViewBag.SortOrder })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.HireDate)
+            @Html.ActionLink("Hire Date", "FindAsync", new { sortBy = "HireDate", sortOrder = ViewBag.SortOrder })
         </th>
         <th></th>
     </tr>
