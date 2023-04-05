@@ -11,25 +11,72 @@ using System.Web.Mvc;
 using Practice.Model;
 using System.Configuration;
 using System.Runtime.Remoting.Messaging;
+using Practice.Common;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace Practice.Repository
 {
-    public class ChefRepository : IChefRepository
+    public class ChefRepository /*: IChefRepository*/
     {
 
         string connectionString = ConfigurationManager.ConnectionStrings["Restaurant"].ConnectionString;
 
 
-        public async Task<List<ChefModel>> GetAllAsync()
+        public async Task<List<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef)
         {
 
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
-                SqlCommand cm = new SqlCommand("select * from chef", connection);
 
-                List<ChefModel> chefs = new List<ChefModel>();
+                StringBuilder queryBuilder = new StringBuilder("SELECT * FROM chef WHERE 1=1");
+
+
+                SqlCommand cm = new SqlCommand();
+
+                //if (!string.IsNullOrEmpty(filteringChef.FirstName))
+                //{
+                //    queryBuilder.Append(" AND FirstName LIKE @FirstName");
+                //    cm.Parameters.AddWithValue("@FirstName", $"%{filteringChef.FirstName}%");
+                //}
+
+                //if (!string.IsNullOrEmpty(filteringChef.LastName))
+                //{
+                //    queryBuilder.Append(" AND LastName LIKE @LastName");
+                //    cm.Parameters.AddWithValue("@LastName", $"%{filteringChef.LastName}%");
+                //}
+
+                if (filteringChef.HireDate.HasValue)
+                {
+                    queryBuilder.Append(" AND HireDate = @HireDate");
+                    cm.Parameters.AddWithValue("@HireDate", filteringChef.HireDate.Value);
+                }
+
+                if (sorting != null)
+                {
+                    queryBuilder.Append($" ORDER BY {sorting.SortBy} {sorting.SortOrder}");
+                }
+
+
+                if (paging != null)
+                {
+                    //int offset = (paging.Page - 1) * paging.ItemsPerPage;
+                    //int fetchNext = paging.ItemsPerPage;
+
+                    queryBuilder.Append(" OFFSET @Offset ROWS FETCH NEXT @FetchNext ROWS ONLY");
+
+                    cm.Parameters.AddWithValue("@Offset", (paging.Page - 1) * paging.ItemsPerPage);
+                    cm.Parameters.AddWithValue("@FetchNext", paging.ItemsPerPage);
+                }
+
+
+                cm.CommandText = queryBuilder.ToString();
+
+                cm.Connection = connection;
+
+                List<ChefModelDTO> chefs = new List<ChefModelDTO>();
 
                 connection.Open();
 
@@ -38,7 +85,7 @@ namespace Practice.Repository
                 {
                     while (await reader.ReadAsync())
                     {
-                        ChefModel chef = new ChefModel();
+                        ChefModelDTO chef = new ChefModelDTO();
 
                         chef.Id = (Guid)reader["Id"];
                         chef.FirstName = (string)reader["FirstName"];
@@ -72,7 +119,7 @@ namespace Practice.Repository
 
         }
 
-        public async Task<ChefModel> GetAsync(Guid id)
+        public async Task<ChefModelDTO> GetByIdAsync(Guid id)
         {
 
 
@@ -87,7 +134,7 @@ namespace Practice.Repository
 
                 SqlDataReader reader = await cm.ExecuteReaderAsync();
 
-                ChefModel chef = new ChefModel();
+                ChefModelDTO chef = new ChefModelDTO();
 
                 if (reader.HasRows)
                 {
@@ -121,7 +168,7 @@ namespace Practice.Repository
         }
 
 
-        public async Task<ChefModel> PostAsync(ChefModel chef)
+        public async Task<ChefModelDTO> PostAsync(ChefModelDTO chef)
         {
 
 
@@ -160,10 +207,10 @@ namespace Practice.Repository
 
         }
 
-        public async Task<bool> PutAsync(Guid id, ChefModel chef)
+        public async Task<bool> PutAsync(Guid id, ChefModelDTO chef)
         {
 
-           using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand cm = new SqlCommand("update chef set Id= @id, FirstName = @FirstName, LastName = @LastName, PhoneNumber = @PhoneNumber, HomeAddress = @HomeAddress, Certified=@Certified, OIB=@OIB, HireDate=@HireDate where id = @id", connection);
 
@@ -218,6 +265,11 @@ namespace Practice.Repository
                 return false;
             }
 
+        }
+
+        public Task<int> PostRandomChefsAsync(int count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

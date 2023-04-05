@@ -1,4 +1,6 @@
-﻿using Practice.Model;
+﻿using PagedList;
+using Practice.Common;
+using Practice.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +11,16 @@ namespace Practice.Repository.Common
 {
     public interface IChefRepository
     {
-        Task<List<ChefModel>> GetAllAsync();
+        Task<IPagedList<ChefModelDTO>> FindAsync(Paging paging, Sorting sorting, ChefFilter filteringChef);
 
-        Task<ChefModel> GetAsync(Guid id);
+        Task<ChefModelDTO> GetByIdAsync(Guid id);
 
         Task<bool> DeleteAsync(Guid id);
 
-        Task<ChefModel> PostAsync(ChefModel chef);
+        Task<ChefModelDTO> PostAsync(ChefModelDTO chef);
 
-        Task<bool> PutAsync(Guid id, ChefModel chef);
+        Task<int> PostRandomChefsAsync(int count);
+
+        Task<bool> PutAsync(Guid id, ChefModelDTO chef);
     }
 }
